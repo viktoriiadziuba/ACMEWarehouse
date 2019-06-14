@@ -1,23 +1,27 @@
 package com.viktoriia.entity;
 
-public class GoodsEntity {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class Order {
 
 	private String id;
 
 	private String type;
 	private String description;
 
-	public GoodsEntity(String id, String type, String description) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.description = description;
+	public Order() {
+		
 	}
 
 	public String getId() {
 		return id;
 	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public String getType() {
 		return type;
 	}
@@ -33,5 +37,4 @@ public class GoodsEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 }

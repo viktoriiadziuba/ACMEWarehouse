@@ -1,5 +1,8 @@
 package com.viktoriia.entity;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class GoodsEntity {
 
 	private String id;
@@ -7,11 +10,11 @@ public class GoodsEntity {
 	private String type;
 	private String description;
 
-	public GoodsEntity(String id, String type, String description) {
-		super();
+	public GoodsEntity() {
+		
+	}
+	public void setId(String id) {
 		this.id = id;
-		this.type = type;
-		this.description = description;
 	}
 
 	public String getId() {

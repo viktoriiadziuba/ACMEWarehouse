@@ -58,7 +58,7 @@ public class Employees extends VerticalLayout {
 
 	private Component createCard() {
 		VerticalLayout employee = new VerticalLayout(grid);
-		grid.setColumns("id", "fullName", "department", "phoneNumber", "dateOfBirth", "email");
+		grid.setColumns("id", "name", "surname", "department", "phoneNumber", "dateOfBirth", "email");
 		employee.addClassName("card");
 		employee.add(grid);
 		employee.setAlignItems(Alignment.CENTER);

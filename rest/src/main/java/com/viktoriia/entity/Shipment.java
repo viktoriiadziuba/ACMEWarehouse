@@ -1,30 +1,32 @@
 package com.viktoriia.entity;
 
-import java.util.Date;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Shipment {
 
 	private String id;
 
-	private Date dateOfShipment;
+	private String dateOfShipment;
 	private String description;
 
-	public Shipment(String id, Date dateOfShipment, String description) {
-		super();
-		this.id = id;
-		this.dateOfShipment = dateOfShipment;
-		this.description = description;
+	public Shipment() {
+	
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public Date getDateOfShipment() {
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getDateOfShipment() {
 		return dateOfShipment;
 	}
 
-	public void setDateOfShipment(Date dateOfShipment) {
+	public void setDateOfShipment(String dateOfShipment) {
 		this.dateOfShipment = dateOfShipment;
 	}
 

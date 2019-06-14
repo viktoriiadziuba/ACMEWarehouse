@@ -8,7 +8,7 @@ public interface EquipmentService {
 
 	void add(EquipmentEntity equipmentEntity);
 
-	void update(EquipmentEntity equipmentEntity);
+	void update(EquipmentEntity equipmentEntity, String[] params);
 
 	void delete(EquipmentEntity equipmentEntity);
 

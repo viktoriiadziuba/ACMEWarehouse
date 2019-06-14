@@ -59,7 +59,7 @@ public class Shipments extends VerticalLayout {
 
 	private Component createCard() {
 		VerticalLayout shipment = new VerticalLayout(grid);
-		grid.setColumns("id", "dateOfShipment", "state", "quantity", "description");
+		grid.setColumns("id", "dateOfShipment", "description");
 		shipment.addClassName("card");
 		shipment.add(grid);
 		shipment.setAlignItems(Alignment.CENTER);

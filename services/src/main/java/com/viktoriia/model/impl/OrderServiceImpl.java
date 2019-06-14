@@ -2,6 +2,7 @@ package com.viktoriia.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.viktoriia.entity.Order;
 import com.viktoriia.model.OrderService;
@@ -14,7 +15,9 @@ public class OrderServiceImpl implements OrderService {
 		orders.add(order);
 	}
 
-	public void update(Order order) {
+	public void update(Order order, String[] params) {
+		order.setType(Objects.requireNonNull(params[0]));
+
 		orders.add(order);
 	}
 

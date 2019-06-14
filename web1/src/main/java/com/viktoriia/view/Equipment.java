@@ -58,7 +58,7 @@ public class Equipment extends VerticalLayout {
 
 	private Component createCard() {
 		VerticalLayout equipment = new VerticalLayout(grid);
-		grid.setColumns("id", "type", "quantity", "description");
+		grid.setColumns("id", "type");
 		equipment.addClassName("card");
 		equipment.add(grid);
 		equipment.setAlignItems(Alignment.CENTER);

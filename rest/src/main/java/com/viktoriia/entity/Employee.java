@@ -1,7 +1,8 @@
 package com.viktoriia.entity;
 
-import java.util.Date;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Employee {
 
 	private String id;
@@ -10,24 +11,17 @@ public class Employee {
 	private String department;
 	private String surname;
 	private String phoneNumber;
-	private Date dateOfBirth;
+	private String dateOfBirth;
 	private String email;
 
-	public Employee(String id, String name, String department, String surname, String phoneNumber, Date dateOfBirth,
-			String email) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.department = department;
-		this.surname = surname;
-		this.phoneNumber = phoneNumber;
-		this.dateOfBirth = dateOfBirth;
-		this.email = email;
+	public Employee() {
+		
 	}
 
 	public String getId() {
 		return id;
 	}
+	
 
 	public String getName() {
 		return name;
@@ -53,7 +47,7 @@ public class Employee {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Date getDateOfBirth() {
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 
@@ -65,4 +59,17 @@ public class Employee {
 		this.email = email;
 	}
 
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 }

@@ -58,7 +58,7 @@ public class Storages extends VerticalLayout {
 
 	private Component createCard() {
 		VerticalLayout storage = new VerticalLayout(grid);
-		grid.setColumns("id", "address");
+		grid.setColumns("id", "address", "capacity");
 		storage.addClassName("card");
 		storage.add(grid);
 		storage.setAlignItems(Alignment.CENTER);

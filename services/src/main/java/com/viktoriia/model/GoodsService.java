@@ -8,7 +8,7 @@ public interface GoodsService {
 
 	void add(GoodsEntity goods);
 
-	void update(GoodsEntity goods);
+	void update(GoodsEntity goods, String[] params);
 
 	void delete(GoodsEntity goods);
 

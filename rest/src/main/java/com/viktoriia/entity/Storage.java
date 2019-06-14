@@ -1,5 +1,8 @@
 package com.viktoriia.entity;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Storage {
 
 	private String id;
@@ -7,15 +10,16 @@ public class Storage {
 	private String address;
 	private String capacity;
 
-	public Storage(String id, String address, String capacity) {
-		super();
-		this.id = id;
-		this.address = address;
-		this.capacity = capacity;
+	public Storage() {
+		
 	}
 
 	public String getId() {
 		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getAddress() {

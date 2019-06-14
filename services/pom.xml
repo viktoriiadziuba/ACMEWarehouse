@@ -7,48 +7,20 @@
     <artifactId>ACMEWarehouse</artifactId>
     <version>1.0</version>
   </parent>
-  
   <groupId>com.viktoriia</groupId>
   <artifactId>services</artifactId>
-  <packaging>war</packaging>
   <version>1.0</version>
   <name>services</name>
   <url>http://maven.apache.org</url>
-  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
   <dependencies>
-  <!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
-<dependency>
-    <groupId>org.eclipse.persistence</groupId>
-    <artifactId>javax.persistence</artifactId>
-    <version>2.2.1</version>
-</dependency>
-  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.9.4</version>
-</dependency>
- <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client -->
-<dependency>
-    <groupId>com.rabbitmq</groupId>
-    <artifactId>amqp-client</artifactId>
-    <version>5.7.1</version>
-</dependency>
-    
   </dependencies>
 </project>
