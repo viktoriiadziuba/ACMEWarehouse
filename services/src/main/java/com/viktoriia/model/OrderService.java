@@ -8,7 +8,7 @@ public interface OrderService {
 
 	void add(Order order);
 
-	void update(Order order, String[] params);
+	void update(Order order);
 
 	void delete(Order order);
 

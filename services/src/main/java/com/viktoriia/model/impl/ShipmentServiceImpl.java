@@ -1,7 +1,6 @@
 package com.viktoriia.model.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.viktoriia.entity.Shipment;
@@ -15,10 +14,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		shipments.add(shipment);
 	}
 
-	public void update(Shipment shipment, Date newDate, String newDescription) {
-		shipment.setDateOfShipment(newDate);
-		shipment.setDescription(newDescription);
-
+	public void update(Shipment shipment) {
 		shipments.add(shipment);
 
 	}
