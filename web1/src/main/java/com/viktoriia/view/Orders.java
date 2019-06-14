@@ -59,7 +59,7 @@ public class Orders extends VerticalLayout {
 
 	private Component createCard() {
 		VerticalLayout order = new VerticalLayout(grid);
-		grid.setColumns("id", "type");
+		grid.setColumns("id", "state", "description");
 		order.addClassName("card");
 		order.add(grid);
 		order.setAlignItems(Alignment.CENTER);

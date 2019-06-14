@@ -1,17 +1,27 @@
 package com.viktoriia.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@Entity
+@Table(name = "storage")
 public class Storage {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 
+	@Column(nullable = false)
 	private String address;
-	private String capacity;
 
-	public Storage(String id, String address, String capacity) {
-		super();
-		this.id = id;
-		this.address = address;
-		this.capacity = capacity;
+	public Storage() {
+		
 	}
 
 	public String getId() {
@@ -24,14 +34,6 @@ public class Storage {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(String capacity) {
-		this.capacity = capacity;
 	}
 
 }

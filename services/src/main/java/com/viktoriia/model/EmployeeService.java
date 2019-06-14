@@ -8,7 +8,7 @@ public interface EmployeeService {
 
 	void add(Employee employee);
 
-	void update(Employee employee, String[] params);
+	void update(Employee employee);
 
 	void delete(Employee employee);
 

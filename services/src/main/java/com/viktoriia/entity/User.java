@@ -1,46 +1,32 @@
 package com.viktoriia.entity;
 
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.viktoriia.entity.enums.UserRole;
 
-public class User {
+@XmlRootElement
+@Entity
+@Table(name = "user")
+public class User extends Person{
 
-	private String id;
-
+	@Column(nullable = false, unique = true)
 	private String userName;
+	
+	@Column(nullable = false, unique = true)
 	private String password;
-	private String fullName;
-	private String phoneNumber;
-	private String email;
-	private Date dateOfBirth;
+	
+	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
-	public User(String id, String userName, String password, String fullName, String phoneNumber, String email,
-			Date dateOfBirth, UserRole role) {
-		super();
-		this.id = id;
-		this.userName = userName;
-		this.password = password;
-		this.fullName = fullName;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.dateOfBirth = dateOfBirth;
-		this.role = role;
+	public User() {
+		
 	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getId() {
-		return id;
-	}
-
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -53,25 +39,6 @@ public class User {
 		this.password = password;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Date getDateOfBirth() {
-		return dateOfBirth;
-	}
 
 	public UserRole getRole() {
 		return role;
