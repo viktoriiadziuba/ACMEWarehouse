@@ -2,7 +2,6 @@ package com.viktoriia.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.viktoriia.entity.Storage;
 import com.viktoriia.model.StorageService;
@@ -15,10 +14,7 @@ public class StorageServiceImpl implements StorageService {
 		storages.add(employee);
 	}
 
-	public void update(Storage storage, String[] params) {
-		storage.setAddress(Objects.requireNonNull(params[0]));
-		storage.setCapacity(Objects.requireNonNull(params[1]));
-
+	public void update(Storage storage) {
 		storages.add(storage);
 
 	}
@@ -33,3 +29,4 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 }
+

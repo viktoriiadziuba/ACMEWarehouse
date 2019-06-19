@@ -8,7 +8,7 @@ public interface StorageService {
 
 	void add(Storage storage);
 
-	void update(Storage storage, String[] params);
+	void update(Storage storage);
 
 	void delete(Storage storage);
 

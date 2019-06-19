@@ -8,7 +8,7 @@ public interface UserService {
 
 	void add(User user);
 
-	void update(User user, String[] params);
+	void update(User user);
 
 	List<User> getAll();
 

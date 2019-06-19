@@ -1,0 +1,7 @@
+package com.viktoriia.entity.enums;
+
+public enum Department {
+	
+	HR_DEPARTMENT, SHIPMENT_DEPARTMENT, EQUIPMENT_DEPARTMENT, MANAGMENT_DEPARTMENT, CHIEF_DEPARTMENT
+
+}
