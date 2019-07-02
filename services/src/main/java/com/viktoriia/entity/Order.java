@@ -1,38 +1,34 @@
 package com.viktoriia.entity;
 
+import java.io.Serializable;
+
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import com.viktoriia.entity.enums.OrderState;
-
-@XmlRootElement
 @Entity
 @Table(name = "order")
-public class Order {
+public class Order extends AbstractEntity implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
+	private static final long serialVersionUID = 8768786933137485826L;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name="description", columnDefinition = "TEXT")
 	private String description;
 	
-	@Enumerated(EnumType.STRING)
-	private OrderState state;
+	@ManyToOne
+	@JoinColumn(name = "order_state_id")
+	private OrderStateEntity state;
+	
+	@OneToMany(mappedBy = "order", orphanRemoval = true)
+	private List<GoodsEntity> goods;
 	
 	public Order() {
 	
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public String getDescription() {
@@ -43,13 +39,27 @@ public class Order {
 		this.description = description;
 	}
 
-	public OrderState getState() {
+	public OrderStateEntity getState() {
 		return state;
 	}
 
-	public void setState(OrderState state) {
+	public void setState(OrderStateEntity state) {
 		this.state = state;
 	}
 
-	
+	public List<GoodsEntity> getGoods() {
+		return goods;
+	}
+
+	public void setGoods(List<GoodsEntity> goods) {
+		this.goods = goods;
+	}
+
+	@Override
+	public String toString() {
+		return "Order [description=" + description + ", state=" + state + ", goods=" + goods + 
+				", getId()=" + getId()
+				+ "]";
+	}	
+
 }
