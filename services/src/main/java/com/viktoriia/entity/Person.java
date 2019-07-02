@@ -1,43 +1,35 @@
 package com.viktoriia.entity;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 @Entity
 @Table(name = "person")
-public class Person {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	@Column(nullable = false)
+public class Person extends AbstractEntity implements Serializable {
+
+	private static final long serialVersionUID = -1463896504190006311L;
+
+	@Column(name="full_name", nullable = false)
 	private String fullName;
 	
-	@Column(nullable = false, unique = true)
+	@Column(name="phone_number", nullable = false, unique = true)
 	private String phoneNumber;
 	
-	@Column(nullable = false)
-	private Date dateOfBirth;
+	@Column(name="date_of_birth", nullable = false)
+	private LocalDate dateOfBirth;
 	
-	@Column(nullable = false, unique = true)
+	@Column(name="email", nullable = false, unique = true)
 	private String email;
+	
 	
 	public Person() {
 		
 	}
 	
-	public int getId() {
-		return id;
-	}
 
 	public String getFullName() {
 		return fullName;
@@ -58,10 +50,11 @@ public class Person {
 		this.email = email;
 	}
 	
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+	
 }

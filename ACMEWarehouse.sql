@@ -48,7 +48,7 @@ CREATE TABLE "person" (
 
 CREATE TABLE "user_role" (
 	"id" serial NOT NULL,
-	"type" VARCHAR(255) NOT NULL,
+	"role" VARCHAR(255) NOT NULL,
 	CONSTRAINT "user_role_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
