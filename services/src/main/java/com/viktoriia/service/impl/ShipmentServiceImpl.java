@@ -64,22 +64,6 @@ public class ShipmentServiceImpl implements ShipmentService {
 	    }
 	}
 	
-	public static void main(String[] args) throws Exception {
-		ShipmentServiceImpl serv = new ShipmentServiceImpl();
-		System.out.println(serv.getShipmentGoods(7));
-		
-		ShipmentStateEntity state = new ShipmentStateEntity();
-		state.setState(ShipmentState.IN_PROGRESS);
-		
-		Shipment shipment = new Shipment();
-		shipment.setDateOfShipment(LocalDate.now());
-		shipment.setQuantity(200);
-		shipment.setDescription("From USA");
-		shipment.setState(state);
-		
-		//serv.add(shipment);
-	}
-	
 	public static void insertAllShipmentStates() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();

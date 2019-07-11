@@ -74,20 +74,6 @@ public class EquipmentServiceImpl implements Serializable, EquipmentService {
 		return null;
 	}
 	
-	public static void main(String[] args) throws Exception {
-		EquipmentTypeEntity type = new EquipmentTypeEntity();
-		type.setType(EquipmentType.HAND_TRUCKS);
-		
-		EquipmentEntity equipment = new EquipmentEntity();
-		equipment.setType(type);
-		equipment.setQuantity(200);
-		
-		EquipmentServiceImpl service = new EquipmentServiceImpl();
-		//service.getEquipmentById(2);
-		System.out.println(service.getEquipmentById(2));
-		
-	}
-
 	@Override
 	public List<EquipmentEntity> getAllEquipment(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();

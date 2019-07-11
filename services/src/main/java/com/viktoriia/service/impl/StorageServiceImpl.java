@@ -66,44 +66,6 @@ public class StorageServiceImpl implements StorageService {
 			session.close();
 	    }
 	}
-	
-	public static void main(String[] args) {
-		Storage storage = new Storage();
-		storage.setAddress("Number 1");
-		
-		GoodsTypeEntity type = new GoodsTypeEntity();
-		type.setType(GoodsType.CLOTHES);
-		
-		ShipmentStateEntity shipState = new ShipmentStateEntity();
-		shipState.setState(ShipmentState.IN_PROGRESS);
-		
-		Shipment shipment = new Shipment();
-		shipment.setDateOfShipment(LocalDate.now());
-		shipment.setDescription("From USA");
-		shipment.setQuantity(400);
-		shipment.setState(shipState);
-		
-		OrderStateEntity orderState = new OrderStateEntity();
-		orderState.setState(OrderState.PLANNED);
-		
-		Order order = new Order();
-		order.setDescription("To ... address");
-		order.setState(orderState);
-		
-		GoodsEntity goods = new GoodsEntity();
-		goods.setDescription("T-shirts");
-		goods.setQuantity(300);
-		goods.setType(type);
-		goods.setStorage(storage);
-		goods.setShipment(shipment);
-		goods.setOrder(order);
-		
-		StorageServiceImpl service = new StorageServiceImpl();
-		//service.addStorageWithGoods(goods);
-		//service.deleteStorageWithGoods(3);
-		System.out.println(service.getStorageGoods(5));
-	}
-
 
 	@Override
 	public Storage getStorageById(int id) {

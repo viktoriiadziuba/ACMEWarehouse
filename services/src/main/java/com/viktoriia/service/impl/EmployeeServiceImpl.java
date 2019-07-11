@@ -41,24 +41,24 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 		session.close();
 	}
 	
-	public static void main(String[] args) throws Exception {
-		DepartmentEntity dep = new DepartmentEntity();
-		dep.setDepartment(Department.HR_DEPARTMENT);
-		
-		Person p = new Person();
-		p.setEmail("allina21@email.com");
-		p.setDateOfBirth(LocalDate.now());
-		p.setPhoneNumber("+3809795021");
-		p.setFullName("Allina");
-		
-		Employee e = new Employee();
-		e.setPerson(p);
-		e.setDepartment(dep);
-		
-		EmployeeServiceImpl service = new EmployeeServiceImpl();
-		//System.out.println(service.getAllDepartments());
-		//service.add(e);
-	}
+//	public static void main(String[] args) throws Exception {
+//		DepartmentEntity dep = new DepartmentEntity();
+//		dep.setDepartment(Department.HR_DEPARTMENT);
+//		
+//		Person p = new Person();
+//		p.setEmail("allina21@email.com");
+//		p.setDateOfBirth(LocalDate.now());
+//		p.setPhoneNumber("+3809795021");
+//		p.setFullName("Allina");
+//		
+//		Employee e = new Employee();
+//		e.setPerson(p);
+//		e.setDepartment(dep);
+//		
+//		EmployeeServiceImpl service = new EmployeeServiceImpl();
+//		//System.out.println(service.getAllDepartments());
+//		//service.add(e);
+//	}
 
 	@Override
 	public void delete(int id) {

@@ -88,23 +88,6 @@ public class OrderServiceImpl implements OrderService {
 		session.close();
 		return null;
 	}
-	
-	public static void main(String[] args) throws Exception {
-		OrderServiceImpl service = new OrderServiceImpl();
-		
-		OrderStateEntity state = new OrderStateEntity();
-		state.setState(OrderState.DONE);
-		
-		Order order = new Order();
-		order.setState(state);
-		order.setDescription("To Chili");
-		
-		
-		//service.add(order);
-		
-		//service.addOrderedGoods(3, goods);
-		System.out.println(service.getOrderedGoods(10));
-	}
 
 	@Override
 	public List<OrderStateEntity> getAllOrderStates() {

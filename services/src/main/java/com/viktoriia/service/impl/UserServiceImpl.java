@@ -102,35 +102,6 @@ public class UserServiceImpl {
 		}
 	}
 	
-	public static void main(String[] args) {
-		DepartmentEntity dep = new DepartmentEntity();
-		dep.setDepartment(Department.EQUIPMENT_DEPARTMENT);
-		
-		Person person = new Person();
-		person.setDateOfBirth(LocalDate.now());
-		person.setEmail("vova@email.com");
-		person.setFullName("VOVA");
-		person.setPhoneNumber("+380952066363");
-		
-		Employee empl = new Employee();
-		empl.setDepartment(dep);
-		empl.setPerson(person);
-		
-		UserRoleEntity role = new UserRoleEntity();
-		role.setRole(UserRole.EQUIPMENT_MANADER);
-		
-		User user = new User();
-		user.setEmployee(empl);
-		user.setRole(role);
-		user.setPassword("1234");
-		user.setPerson(person);
-		user.setUserName("vova.V");
-		
-		UserServiceImpl service = new UserServiceImpl();
-		//service.add(user);
-		System.out.println(service.getAllUsers());
-	}
-
 	public static void insertAllUserRoles() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
