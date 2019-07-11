@@ -1,68 +1,95 @@
 package com.viktoriia.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.viktoriia.entity.GoodsEntity;
-import com.viktoriia.rabbitmq.receive.DBGoodsReceiver;
-import com.viktoriia.rabbitmq.send.Sender;
+import com.viktoriia.entity.GoodsTypeEntity;
+import com.viktoriia.entity.enums.GoodsType;
 import com.viktoriia.service.GoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
 public class GoodsServiceImpl implements GoodsService {
-
-	private Sender sender;
 	
-	public GoodsServiceImpl() throws Exception {
-		this.sender = new Sender();
+	public GoodsServiceImpl() {
 		
-		DBGoodsReceiver.receiveGoods();
 	}
 	
-	public void add(GoodsEntity goods) {
-		try {
-			sender.sendObject(goods);
-		} catch (Exception e) {
-			e.printStackTrace();
+	@Override
+	public GoodsEntity getGoodsById(int id) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAllGoods();
+		for(GoodsEntity gds : goods) {
+			if(gds.getId() == id) {
+			session.get(GoodsEntity.class, id);
+			return gds;
+			} else {
+				System.out.println("There isn't such Employee");
+			}
 		}
-		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-		Transaction tx1 = session.beginTransaction();
-		
-		session.save(goods.getType());
-		session.save(goods.getShipment());
-		session.save(goods.getStorage());
-		session.save(goods.getOrder());
-		session.save(goods);
 		
 		tx1.commit();
 		session.close();
+		return null;
 	}
-	
-	public void update(GoodsEntity goods) {
+
+	@Override
+	public List<GoodsEntity> getAllGoods(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.update(goods.getType());
-		session.update(goods);
-		tx1.commit();
-		session.close();
-
+	    try
+	    {
+	        return session.createCriteria(GoodsEntity.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+			session.close();
+	    }
 	}
 
-	public void delete(GoodsEntity goods) {
+	@Override
+	public List<GoodsTypeEntity> getAllGoodsTypes() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.delete(goods);
+		try
+	    {
+	        return session.createCriteria(GoodsTypeEntity.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+			session.close();
+	    }
+	}
+
+	public static void insertAllGoodsTypes() {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		GoodsTypeEntity type1 = new GoodsTypeEntity();
+		type1.setType(GoodsType.ACCESSORIES);
+		GoodsTypeEntity type2 = new GoodsTypeEntity();
+		type2.setType(GoodsType.CLOTHES);
+		GoodsTypeEntity type3 = new GoodsTypeEntity();
+		type3.setType(GoodsType.FURNITURE);
+		GoodsTypeEntity type4 = new GoodsTypeEntity();
+		type4.setType(GoodsType.HOUSEHOLD_EQUIPMENT);
+		GoodsTypeEntity type5 = new GoodsTypeEntity();
+		type5.setType(GoodsType.SHOES);
+		
+		session.save(type1);
+		session.save(type2);
+		session.save(type3);
+		session.save(type4);
+		session.save(type5);
+		
 		tx1.commit();
 		session.close();
-
 	}
-
-	public List<GoodsEntity> getAll() {
-		String query = "SELECT * FROM public.goods";
-		List<GoodsEntity> goods = (List<GoodsEntity>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(query).list();
-		return goods;
-	}
-
 }

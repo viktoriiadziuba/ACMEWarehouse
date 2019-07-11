@@ -26,5 +26,13 @@ public class UserRoleEntity extends AbstractEntity implements Serializable {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("	[UserRole: "
+				+ "id=%d "
+				+ "role=%s]", 
+				getId(), getRole());
+	}	
 	
 }

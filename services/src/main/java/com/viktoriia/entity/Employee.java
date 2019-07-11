@@ -9,17 +9,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 public class Employee extends AbstractEntity implements Serializable {
 	
 	private static final long serialVersionUID = 7702555619063933201L;
 	
 	@OneToOne
-	@JoinColumn(name = "person_id")
+	@JoinColumn(name = "persons_id")
 	private Person person;
 	
 	@ManyToOne
-	@JoinColumn(name = "department_id")
+	@JoinColumn(name = "departments_id")
 	private DepartmentEntity department;
 
 	
@@ -50,8 +50,11 @@ public class Employee extends AbstractEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Employee [person=" + person + ", department=" + department + 
-				", getId()=" + getId() + "]";
+		return String.format("[Employee: "
+				+ "id=%d "
+				+ "\n" + "%s "
+				+ "\n" + "%s]", 
+				getId(), person, department);                          
 	}	
-
+	
 }

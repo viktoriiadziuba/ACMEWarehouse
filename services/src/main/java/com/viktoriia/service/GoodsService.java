@@ -3,15 +3,13 @@ package com.viktoriia.service;
 import java.util.List;
 
 import com.viktoriia.entity.GoodsEntity;
+import com.viktoriia.entity.GoodsTypeEntity;
 
 public interface GoodsService {
+	
+	GoodsEntity getGoodsById(int id);
 
-	void add(GoodsEntity goods);
+	List<GoodsEntity> getAllGoods();
 
-	void update(GoodsEntity goods);
-
-	void delete(GoodsEntity goods);
-
-	List<GoodsEntity> getAll();
-
+	List<GoodsTypeEntity> getAllGoodsTypes();
 }

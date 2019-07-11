@@ -1,6 +1,6 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 
 import javax.persistence.Column; 
 import javax.persistence.Entity;
@@ -49,8 +49,11 @@ public class EquipmentEntity extends AbstractEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "EquipmentEntity [quantity=" + quantity + ", type=" + type + 
-				", getId()=" + getId() + "]";
+		return String.format("[Equipment: "
+				+ "id=%d "
+				+ "quantity=%d "
+				+ "\n" + "%s]", 
+				getId(), quantity, type);       
 	}	
 	
 }
