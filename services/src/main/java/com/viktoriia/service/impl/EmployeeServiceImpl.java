@@ -1,7 +1,6 @@
 package com.viktoriia.service.impl;
 
 import java.io.Serializable; 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import org.hibernate.Transaction;
 
 import com.viktoriia.entity.DepartmentEntity;
 import com.viktoriia.entity.Employee;
-import com.viktoriia.entity.Person;
 import com.viktoriia.entity.enums.Department;
 import com.viktoriia.service.EmployeeService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
@@ -20,7 +18,7 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 	private static final long serialVersionUID = -4934208404889582098L;
 	
 	public EmployeeServiceImpl() { 
-
+		
 	}
 
 	@Override
@@ -34,6 +32,7 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 				employee.setDepartment(dep);
 			} 
 		}
+	
 		session.save(employee.getPerson());
 		session.save(employee);
 		
@@ -42,18 +41,22 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 	}
 	
 //	public static void main(String[] args) throws Exception {
-//		DepartmentEntity dep = new DepartmentEntity();
-//		dep.setDepartment(Department.HR_DEPARTMENT);
+//		Shipment shipment = new Shipment();
+//		shipment.setId(8);
+//	
+//		QueueMessage message = new QueueMessage();
+//		message.setClassName("shipment");
+//		message.setOperation(CRUDOperation.READ_BY_FIELD);
+//		message.setEntity(shipment);
 //		
-//		Person p = new Person();
-//		p.setEmail("allina21@email.com");
-//		p.setDateOfBirth(LocalDate.now());
-//		p.setPhoneNumber("+3809795021");
-//		p.setFullName("Allina");
+//		QueueProducer producer = new QueueProducer("queue");
+//		producer.sendMessage(message);
+//
 //		
-//		Employee e = new Employee();
-//		e.setPerson(p);
-//		e.setDepartment(dep);
+//		QueueConsumer consumer = new QueueConsumer("queue");
+//		Thread consumerThread = new Thread(consumer);
+//		consumerThread.start();
+//		
 //		
 //		EmployeeServiceImpl service = new EmployeeServiceImpl();
 //		//System.out.println(service.getAllDepartments());

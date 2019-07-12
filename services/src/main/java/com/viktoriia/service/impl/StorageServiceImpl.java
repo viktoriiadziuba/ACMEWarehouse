@@ -26,7 +26,6 @@ public class StorageServiceImpl implements StorageService {
 		
 	}
 
-	@Override
 	public void add(Storage storage) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -37,7 +36,6 @@ public class StorageServiceImpl implements StorageService {
 		session.close();
 	}
 
-	@Override
 	public void delete(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -103,61 +101,5 @@ public class StorageServiceImpl implements StorageService {
 		session.close();
 		return null;
 	}
-
-	@Override
-	public GoodsEntity addStorageWithGoods(GoodsEntity entity) {
-		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-		Transaction tx1 = session.beginTransaction();
-		
-		GoodsEntity goods = new GoodsEntity();
-		
-		OrderServiceImpl orderService = new OrderServiceImpl();
-		ShipmentServiceImpl shipmentService = new ShipmentServiceImpl();
-		GoodsServiceImpl goodsService = new GoodsServiceImpl();
-		orderService.add(entity.getOrder());
-		shipmentService.add(entity.getShipment());
-		
-		List<GoodsTypeEntity> goodsTypes = goodsService.getAllGoodsTypes();
-		for(GoodsTypeEntity type : goodsTypes) {
-			if(entity.getType().getType().name() == type.getType().name()) {
-				goods.setType(type);
-			}
-		}
-		
-		goods.setDescription(entity.getDescription());
-		goods.setQuantity(entity.getQuantity());
-		goods.setOrder(entity.getOrder());
-		goods.setShipment(entity.getShipment());
-		goods.setShipment(entity.getShipment());
-		goods.setStorage(entity.getStorage());
-		
-		session.save(goods.getStorage());
-		session.save(goods);
-		
-		tx1.commit();
-		session.close();
-		return null;
-	}
-
-	@Override
-	public void deleteStorageWithGoods(int storageId) {
-		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-		Transaction tx1 = session.beginTransaction();
-		
-		GoodsServiceImpl goodsService = new GoodsServiceImpl();
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAllGoods();
-		for(GoodsEntity gds : goods) {
-			session.delete(gds);
-		}
-		ArrayList<Storage> storages = (ArrayList<Storage>) getAllStorages();
-		for(Storage str : storages) {
-			if(str.getId() == storageId) {
-				session.delete(str);
-			}
-		}
-		tx1.commit();
-		session.close();		
-	}
-
 }
 

@@ -12,7 +12,7 @@ public abstract class EndPoint {
 	protected Channel channel;
 	protected Connection connection;
 	protected String endPointName;
-	
+		
 	public EndPoint(String endpointName) throws IOException, TimeoutException {
 		this.endPointName = endpointName;
 		

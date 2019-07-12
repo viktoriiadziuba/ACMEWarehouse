@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 
 import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.GoodsTypeEntity;
+import com.viktoriia.entity.Storage;
 import com.viktoriia.entity.enums.GoodsType;
 import com.viktoriia.service.GoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
@@ -91,5 +92,53 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		tx1.commit();
 		session.close();
+	}
+
+	@Override
+	public void add(GoodsEntity entity) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		OrderServiceImpl orderService = new OrderServiceImpl();
+		ShipmentServiceImpl shipmentService = new ShipmentServiceImpl();
+		StorageServiceImpl storageService = new StorageServiceImpl();
+		orderService.add(entity.getOrder());
+		shipmentService.add(entity.getShipment());
+		storageService.add(entity.getStorage());
+		
+		List<GoodsTypeEntity> goodsTypes = getAllGoodsTypes();
+		for(GoodsTypeEntity type : goodsTypes) {
+			if(entity.getType().getType().name() == type.getType().name()) {
+				entity.setType(type);
+			}
+		}
+		
+		entity.setDescription(entity.getDescription());
+		entity.setQuantity(entity.getQuantity());
+		entity.setOrder(entity.getOrder());
+		entity.setShipment(entity.getShipment());
+		entity.setStorage(entity.getStorage());
+		
+		session.save(entity);
+		
+		tx1.commit();
+		session.close();
+		
+	}
+
+	@Override
+	public void delete(int id) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAllGoods();
+		for(GoodsEntity gds : goods) {
+			if(gds.getId() == id) {
+			session.delete(gds);
+			}
+		}
+		
+		tx1.commit();
+		session.close();	
 	}
 }

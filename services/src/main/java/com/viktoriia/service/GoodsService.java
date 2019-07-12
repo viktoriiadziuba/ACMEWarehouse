@@ -7,6 +7,10 @@ import com.viktoriia.entity.GoodsTypeEntity;
 
 public interface GoodsService {
 	
+	void add(GoodsEntity entity);
+	
+	void delete(int id);
+	
 	GoodsEntity getGoodsById(int id);
 
 	List<GoodsEntity> getAllGoods();

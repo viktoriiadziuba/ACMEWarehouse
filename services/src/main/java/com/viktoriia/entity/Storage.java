@@ -8,6 +8,8 @@ import javax.persistence.Table;
 @Table(name = "storages")
 public class Storage extends AbstractEntity {
 	
+	private static final long serialVersionUID = 6193300568421687362L;
+	
 	@Column(nullable = false)
 	private String address;
 	

@@ -1,6 +1,5 @@
 package com.viktoriia.service.impl;
 
-import java.time.LocalDate; 
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +34,8 @@ public class ShipmentServiceImpl implements ShipmentService {
 		tx1.commit();
 		session.close();
 	}
-		
+	
+	@Override
 	public List<Shipment> getAllShipments(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -50,6 +50,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	    }
 	}
 	
+	@Override
 	public List<ShipmentStateEntity> getAllShipmentStates() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();

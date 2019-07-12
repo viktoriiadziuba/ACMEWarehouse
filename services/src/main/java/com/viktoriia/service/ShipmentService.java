@@ -7,8 +7,6 @@ import com.viktoriia.entity.Shipment;
 import com.viktoriia.entity.ShipmentStateEntity;
 
 public interface ShipmentService {
-
-	void add(Shipment shipment);
 	
 	Shipment getShipmentById(int id);
 
