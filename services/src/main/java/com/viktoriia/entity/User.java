@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 2609784133470143730L;
@@ -86,6 +86,17 @@ public class User extends AbstractEntity implements Serializable {
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("[User: "
+				+ "id=%d "
+				+ "userName=%s "
+				+ "\n" + "%s "
+				+ "\n" + "%s "
+				+ "\n" + "%s]", 
+				getId(), userName, role, person, employee);
 	}
 	
 }

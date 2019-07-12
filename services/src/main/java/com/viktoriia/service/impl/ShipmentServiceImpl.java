@@ -1,66 +1,123 @@
 package com.viktoriia.service.impl;
 
+import java.time.LocalDate; 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Shipment;
-import com.viktoriia.rabbitmq.receive.DBShipmentReceiver;
-import com.viktoriia.rabbitmq.send.Sender;
+import com.viktoriia.entity.ShipmentStateEntity;
+import com.viktoriia.entity.enums.ShipmentState;
 import com.viktoriia.service.ShipmentService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
 public class ShipmentServiceImpl implements ShipmentService {
-
-	private Sender sender;
 	
-	public ShipmentServiceImpl() throws Exception {
-		this.sender = new Sender();
+	public ShipmentServiceImpl() {
 		
-		DBShipmentReceiver.receiveShipment();
 	}
 	
 	public void add(Shipment shipment) {
-		try {
-			sender.sendObject(shipment);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		session.save(shipment.getState());
-		session.save(shipment.getGoods());
+		List<ShipmentStateEntity> states = getAllShipmentStates();
+		for(ShipmentStateEntity ship : states) {
+			if(shipment.getState().getState().name() == ship.getState().name()) {
+				shipment.setState(ship);;
+			} 
+		}
 		session.save(shipment);
 		
 		tx1.commit();
 		session.close();
 	}
+		
+	public List<Shipment> getAllShipments(){  
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+	    try
+	    {
+	        return session.createCriteria(Shipment.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+			session.close();
+	    }
+	}
 	
-	public void update(Shipment shipment) {
+	public List<ShipmentStateEntity> getAllShipmentStates() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.update(shipment.getState());
-		session.update(shipment);
-		tx1.commit();
-		session.close();
-
+		try
+	    {
+	        return session.createCriteria(ShipmentStateEntity.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+			session.close();
+	    }
 	}
-
-	public void delete(Shipment shipment) {
+	
+	public static void insertAllShipmentStates() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.delete(shipment);
+		
+		ShipmentStateEntity state1 = new ShipmentStateEntity();
+		state1.setState(ShipmentState.DONE);
+		ShipmentStateEntity state2 = new ShipmentStateEntity();
+		state2.setState(ShipmentState.IN_PROGRESS);
+		ShipmentStateEntity state3 = new ShipmentStateEntity();
+		state3.setState(ShipmentState.PLANNED);
+		
+		session.save(state1);
+		session.save(state2);
+		session.save(state3);
+		
 		tx1.commit();
 		session.close();
-
 	}
 
-	public List<Shipment> getAll() {
-		String query = "SELECT * FROM public.shipment";
-		List<Shipment> shipments = (List<Shipment>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(query).list();
-		return shipments;
+	@Override
+	public Shipment getShipmentById(int id) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<Shipment> shipments = (ArrayList<Shipment>) getAllShipments();
+		for(Shipment ship : shipments) {
+			if(ship.getId() == id) {
+			session.get(Shipment.class, id);
+			return ship;
+			} 
+		}
+		
+		tx1.commit();
+		session.close();
+		return null;
+	}
+
+	@Override
+	public List<GoodsEntity> getShipmentGoods(int shipmentId) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		GoodsServiceImpl goodsService = new GoodsServiceImpl();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAllGoods();
+		ArrayList<GoodsEntity> shipmentGoods = new ArrayList<GoodsEntity>();
+		for(GoodsEntity gds : goods) {
+			if(gds.getShipment().getId() == shipmentId) {
+				shipmentGoods.add(gds);
+				return shipmentGoods;
+			} 
+		}
+		tx1.commit();
+		session.close();
+		return null;
 	}
 
 }

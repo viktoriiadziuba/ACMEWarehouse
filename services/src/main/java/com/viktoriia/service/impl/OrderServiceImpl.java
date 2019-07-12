@@ -1,37 +1,35 @@
 package com.viktoriia.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Order;
-import com.viktoriia.rabbitmq.receive.DBOrderReceiver;
-import com.viktoriia.rabbitmq.send.Sender;
+import com.viktoriia.entity.OrderStateEntity;
+import com.viktoriia.entity.enums.OrderState;
 import com.viktoriia.service.OrderService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
 public class OrderServiceImpl implements OrderService {
-
-	private Sender sender;
 	
-	public OrderServiceImpl() throws Exception {
-		this.sender = new Sender();
+	public OrderServiceImpl() {
 		
-		DBOrderReceiver.receiveOrder();
 	}
 	
+	@Override
 	public void add(Order order) {
-		try {
-			sender.sendObject(order);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		session.save(order.getState());
-		session.save(order.getGoods());
+		List<OrderStateEntity> states = getAllOrderStates();
+		for(OrderStateEntity or : states) {
+			if(order.getState().getState().name() == or.getState().name()) {
+				order.setState(or);;
+			} 
+		}
 		session.save(order);
 
 		
@@ -39,30 +37,90 @@ public class OrderServiceImpl implements OrderService {
 		session.close();
 	}
 	
-	public void update(Order order) {
+	@Override
+	public Order getOrderById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.save(order.getState());
-		session.save(order.getGoods());
-		session.update(order);
+		
+		ArrayList<Order> orders = (ArrayList<Order>) getAllOrders();
+		for(Order ord : orders) {
+			if(ord.getId() == id) {
+			session.get(Order.class, id);
+			return ord;
+			} 
+		}
+		
 		tx1.commit();
 		session.close();
-
+		return null;
 	}
-
-	public void delete(Order order) {
+	
+	@Override
+	public List<Order> getAllOrders(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.delete(order);
+	    try
+	    {
+	        return session.createCriteria(Order.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+			session.close();
+	    }
+	}
+	
+	
+	public List<GoodsEntity> getOrderedGoods(int orderId) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		GoodsServiceImpl goodsService = new GoodsServiceImpl();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAllGoods();
+		ArrayList<GoodsEntity> orderedGoods = new ArrayList<GoodsEntity>();
+		for(GoodsEntity gds : goods) {
+			if(gds.getOrder().getId() == orderId) {
+				orderedGoods.add(gds);
+				return orderedGoods;
+			} 
+		}
 		tx1.commit();
 		session.close();
-
+		return null;
 	}
 
-	public List<Order> getAll() {
-		String query = "SELECT * FROM public.order";
-		List<Order> orders = (List<Order>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(query).list();
-		return orders;
+	@Override
+	public List<OrderStateEntity> getAllOrderStates() {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		try
+	    {
+	        return session.createCriteria(OrderStateEntity.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+			session.close();
+	    }
+	}
+	
+	public static void insertAllOrderStates() {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		OrderStateEntity state1 = new OrderStateEntity();
+		state1.setState(OrderState.DONE);
+		OrderStateEntity state2 = new OrderStateEntity();
+		state2.setState(OrderState.IN_PROGRESS);
+		OrderStateEntity state3 = new OrderStateEntity();
+		state3.setState(OrderState.PLANNED);
+		
+		session.save(state1);
+		session.save(state2);
+		session.save(state3);
+		
+		tx1.commit();
+		session.close();
 	}
 	
 }

@@ -26,4 +26,13 @@ public class OrderStateEntity extends AbstractEntity implements Serializable {
 		this.state = state;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("	[OrderState: "
+				+ "id=%d "
+				+ "state=%s]",
+				getId(), getState());
+	}
+
+	
 }

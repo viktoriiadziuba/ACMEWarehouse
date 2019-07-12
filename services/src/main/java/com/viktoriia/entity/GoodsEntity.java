@@ -1,6 +1,6 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,19 +20,30 @@ public class GoodsEntity extends AbstractEntity implements Serializable {
 	
 	@Column(name = "quantity", nullable = false)
 	private int quantity;
+	
+	@Column(name="description", columnDefinition = "TEXT")
+	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "goods_id")
+	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
 	
 	@ManyToOne
-	@JoinColumn(name = "goods_id", insertable=false, updatable=false)
-	private Order order;
-	
-	@ManyToOne
-	@JoinColumn(name = "goods_id", insertable=false, updatable=false)
+	@JoinColumn(name = "storage_id")
 	private Storage storage;
 	
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Order order;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public GoodsEntity() {
 		
 	}
@@ -61,14 +72,6 @@ public class GoodsEntity extends AbstractEntity implements Serializable {
 		this.shipment = shipment;
 	}
 
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
 	public Storage getStorage() {
 		return storage;
 	}
@@ -77,11 +80,25 @@ public class GoodsEntity extends AbstractEntity implements Serializable {
 		this.storage = storage;
 	}
 
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+	
 	@Override
 	public String toString() {
-		return "GoodsEntity [type=" + type + ", quantity=" + quantity + ", shipment=" + shipment + ", order=" + order
-				+ ", storage=" + storage + 
-				", getId()=" + getId() + "]";
-	}		
+		return String.format("[Goods: "
+				+ "id=%d "
+				+ "quantity=%d "
+				+ "description=%s "
+				+ "\n" + "%s "
+				+ "\n" + "%s "
+				+ "\n" + "%s "
+				+ "\n" + "%s",
+				getId(), quantity, description, type, shipment, storage, order);
+	}	
 	
 }

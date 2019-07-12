@@ -26,5 +26,14 @@ public class ShipmentStateEntity extends AbstractEntity implements Serializable 
 	public void setState(ShipmentState state) {
 		this.state = state;
 	}
-		
+
+	@Override
+	public String toString() {
+		return String.format("	[ShipmentState: "
+				+ "id=%d "
+				+ "state=%s]", 
+				getId(), getState());
+	}
+	
+	
 }

@@ -56,5 +56,16 @@ public class Person extends AbstractEntity implements Serializable {
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
+
+	@Override
+	public String toString() {
+		return String.format("	[Person: "
+				+ "id=%d "
+				+ "fullName=%s "
+				+ "phoneNumber=%s "
+				+ "dateOfBirth=%tD "
+				+ "email=%s]", 
+				getId(), fullName, phoneNumber, dateOfBirth, email);  
+	}
+		
 }

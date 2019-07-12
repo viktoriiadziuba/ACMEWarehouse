@@ -1,9 +1,10 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -12,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "shipment")
+@Table(name = "shipments")
 public class Shipment extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 7196079622275175669L;
@@ -30,9 +31,6 @@ public class Shipment extends AbstractEntity implements Serializable {
 	@Column(nullable = false)
 	private int quantity;
 	
-	@OneToMany(mappedBy = "shipment", orphanRemoval = true)
-	private List<GoodsEntity> goods;
-
 	public Shipment() {
 		
 	}
@@ -69,19 +67,16 @@ public class Shipment extends AbstractEntity implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public List<GoodsEntity> getGoods() {
-		return goods;
-	}
-
-	public void setGoods(List<GoodsEntity> goods) {
-		this.goods = goods;
-	}
 
 	@Override
 	public String toString() {
-		return "Shipment [dateOfShipment=" + dateOfShipment + ", description=" + description + ", state=" + state
-				+ ", quantity=" + quantity + ", goods=" + goods + 
-				", getId()=" + getId() + "]";
+		return String.format("[Shipment: "
+				+ "id=%d "
+				+ "quantity=%d "
+				+ "dateOfShipment=%tD "
+				+ "description=%s "
+				+ "\n" + "%s]", 
+				getId(), quantity, dateOfShipment, description, state);
 	}
 		
 }

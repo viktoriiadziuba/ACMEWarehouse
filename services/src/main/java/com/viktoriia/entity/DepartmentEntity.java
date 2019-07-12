@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import com.viktoriia.entity.enums.Department;
 
 @Entity
-@Table(name = "department")
+@Table(name = "departments")
 public class DepartmentEntity extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = -4410557928254697842L;
@@ -32,5 +32,14 @@ public class DepartmentEntity extends AbstractEntity implements Serializable {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("	[Department: "
+				+ "id=%d "
+				+ "department=%s]", 
+				getId(), getDepartment());                               
+	}
+	
 	
 }

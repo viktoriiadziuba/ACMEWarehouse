@@ -1,18 +1,15 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable;
-
-import java.util.List;
+import java.io.Serializable; 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class Order extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 8768786933137485826L;
@@ -23,9 +20,6 @@ public class Order extends AbstractEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "order_state_id")
 	private OrderStateEntity state;
-	
-	@OneToMany(mappedBy = "order", orphanRemoval = true)
-	private List<GoodsEntity> goods;
 	
 	public Order() {
 	
@@ -47,19 +41,14 @@ public class Order extends AbstractEntity implements Serializable {
 		this.state = state;
 	}
 
-	public List<GoodsEntity> getGoods() {
-		return goods;
-	}
-
-	public void setGoods(List<GoodsEntity> goods) {
-		this.goods = goods;
-	}
 
 	@Override
 	public String toString() {
-		return "Order [description=" + description + ", state=" + state + ", goods=" + goods + 
-				", getId()=" + getId()
-				+ "]";
+		return String.format("[Order: "
+				+ "id=%d "
+				+ "description=%s "
+				+ "%s]",
+				getId(), description, state);
 	}	
 
 }

@@ -1,8 +1,7 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,9 +18,6 @@ public class GoodsTypeEntity extends AbstractEntity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private GoodsType type;
 	
-	@Column(name="description", columnDefinition = "TEXT")
-	private String description;
-	
 
 	public GoodsType getType() {
 		return type;
@@ -31,12 +27,14 @@ public class GoodsTypeEntity extends AbstractEntity implements Serializable {
 		this.type = type;
 	}
 
-	public String getDescription() {
-		return description;
+	@Override
+	public String toString() {
+		return String.format("	[GoodsType: "
+				+ "id=%d "
+				+ "type=%s]", 
+				getId(), getType()); 
 	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
+	
 	
 }
