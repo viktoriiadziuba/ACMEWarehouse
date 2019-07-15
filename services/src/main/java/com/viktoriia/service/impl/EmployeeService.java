@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.io.Serializable; 
+import java.io.Serializable;   
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,15 +9,20 @@ import org.hibernate.Transaction;
 
 import com.viktoriia.entity.DepartmentEntity;
 import com.viktoriia.entity.Employee;
+import com.viktoriia.entity.Shipment;
 import com.viktoriia.entity.enums.Department;
-import com.viktoriia.service.EmployeeService;
+import com.viktoriia.rabbitmq.CRUDOperation;
+import com.viktoriia.rabbitmq.QueueConsumer;
+import com.viktoriia.rabbitmq.QueueMessage;
+import com.viktoriia.rabbitmq.QueueProducer;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
+import com.viktoriia.service.Service;
 
-public class EmployeeServiceImpl implements Serializable, EmployeeService {
+public class EmployeeService implements Serializable, Service<Employee> {
 	
 	private static final long serialVersionUID = -4934208404889582098L;
 	
-	public EmployeeServiceImpl() { 
+	public EmployeeService() { 
 		
 	}
 
@@ -40,35 +45,35 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 		session.close();
 	}
 	
-//	public static void main(String[] args) throws Exception {
-//		Shipment shipment = new Shipment();
-//		shipment.setId(8);
-//	
-//		QueueMessage message = new QueueMessage();
-//		message.setClassName("shipment");
-//		message.setOperation(CRUDOperation.READ_BY_FIELD);
-//		message.setEntity(shipment);
-//		
-//		QueueProducer producer = new QueueProducer("queue");
-//		producer.sendMessage(message);
-//
-//		
-//		QueueConsumer consumer = new QueueConsumer("queue");
-//		Thread consumerThread = new Thread(consumer);
-//		consumerThread.start();
-//		
-//		
-//		EmployeeServiceImpl service = new EmployeeServiceImpl();
-//		//System.out.println(service.getAllDepartments());
-//		//service.add(e);
-//	}
+	public static void main(String[] args) throws Exception {
+		Shipment shipment = new Shipment();
+		shipment.setId(8);
+	
+		QueueMessage message = new QueueMessage();
+		message.setClassName(Shipment.class.toString());
+		message.setOperation(CRUDOperation.READ_BY_FIELD);
+		message.setEntity(shipment);
+		
+		QueueProducer producer = new QueueProducer("queue");
+		producer.sendMessage(message);
+
+		
+		QueueConsumer consumer = new QueueConsumer("queue");
+		Thread consumerThread = new Thread(consumer);
+		consumerThread.start();
+		
+		
+		EmployeeService service = new EmployeeService();
+		//System.out.println(service.getAllDepartments());
+		//service.add(e);
+	}
 
 	@Override
 	public void delete(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Employee> employees = (ArrayList<Employee>) getAllEmployees();
+		ArrayList<Employee> employees = (ArrayList<Employee>) getAll();
 		for(Employee empl : employees) {
 			if(empl.getId() == id) {
 			session.delete(empl);
@@ -80,7 +85,7 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 	}
 	
 	@Override
-	public List<Employee> getAllEmployees(){  
+	public List<Employee> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try {
@@ -94,11 +99,11 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 	}
 	
 	@Override
-	public Employee getEmployeeById(int id) {
+	public Employee getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Employee> employees = (ArrayList<Employee>) getAllEmployees();
+		ArrayList<Employee> employees = (ArrayList<Employee>) getAll();
 		for(Employee empl : employees) {
 			if(empl.getId() == id) {
 			session.get(Employee.class, id);
@@ -111,7 +116,6 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 		return null;
 	}
 
-	@Override
 	public List<DepartmentEntity> getAllDepartments() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -150,5 +154,4 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 		tx1.commit();
 		session.close();
 	}
-
 }

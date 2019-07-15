@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.io.Serializable; 
+import java.io.Serializable;  
 import java.util.ArrayList; 
 import java.util.List;
 
@@ -10,14 +10,14 @@ import org.hibernate.Transaction;
 import com.viktoriia.entity.EquipmentEntity;
 import com.viktoriia.entity.EquipmentTypeEntity;
 import com.viktoriia.entity.enums.EquipmentType;
-import com.viktoriia.service.EquipmentService;
+import com.viktoriia.service.Service;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class EquipmentServiceImpl implements Serializable, EquipmentService {
+public class EquipmentService implements Serializable, Service<EquipmentEntity> {
 	
 	private static final long serialVersionUID = -3439969593531677905L;
 
-	public EquipmentServiceImpl() {
+	public EquipmentService() {
 		
 	}
 	
@@ -43,8 +43,7 @@ public class EquipmentServiceImpl implements Serializable, EquipmentService {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		EquipmentServiceImpl service = new EquipmentServiceImpl();
-		ArrayList<EquipmentEntity> equipments = (ArrayList<EquipmentEntity>) service.getAllEquipment();
+		ArrayList<EquipmentEntity> equipments = (ArrayList<EquipmentEntity>) getAll();
 		for(EquipmentEntity eqv : equipments) {
 			if(eqv.getId() == id) {
 				session.delete(eqv);
@@ -56,12 +55,11 @@ public class EquipmentServiceImpl implements Serializable, EquipmentService {
 	}
 	
 	@Override
-	public EquipmentEntity getEquipmentById(int id) {
+	public EquipmentEntity getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		EquipmentServiceImpl service = new EquipmentServiceImpl();
-		ArrayList<EquipmentEntity> equips = (ArrayList<EquipmentEntity>) service.getAllEquipment();
+		ArrayList<EquipmentEntity> equips = (ArrayList<EquipmentEntity>) getAll();
 		for(EquipmentEntity eqv : equips) {
 			if(eqv.getId() == id) {
 			session.get(EquipmentEntity.class, id);
@@ -75,7 +73,7 @@ public class EquipmentServiceImpl implements Serializable, EquipmentService {
 	}
 	
 	@Override
-	public List<EquipmentEntity> getAllEquipment(){  
+	public List<EquipmentEntity> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try
@@ -89,7 +87,6 @@ public class EquipmentServiceImpl implements Serializable, EquipmentService {
 	    }
 	}
 
-	@Override
 	public List<EquipmentTypeEntity> getAllEquipmentTypes() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();

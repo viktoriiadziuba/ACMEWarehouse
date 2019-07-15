@@ -1,7 +1,6 @@
 package com.viktoriia.rabbitmq;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList;  
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -11,26 +10,33 @@ import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Order;
 import com.viktoriia.entity.Shipment;
 import com.viktoriia.entity.Storage;
-import com.viktoriia.service.impl.EmployeeServiceImpl;
-import com.viktoriia.service.impl.EquipmentServiceImpl;
-import com.viktoriia.service.impl.GoodsServiceImpl;
-import com.viktoriia.service.impl.OrderServiceImpl;
-import com.viktoriia.service.impl.ShipmentServiceImpl;
-import com.viktoriia.service.impl.StorageServiceImpl;
+import com.viktoriia.service.impl.EmployeeService;
+import com.viktoriia.service.impl.EquipmentService;
+import com.viktoriia.service.impl.GoodsService;
+import com.viktoriia.service.impl.OrderService;
+import com.viktoriia.service.impl.ShipmentService;
+import com.viktoriia.service.impl.StorageService;
 
-public class MessageHandler {
-	
-	public static List<QueueMessage> messageBodies = new ArrayList<QueueMessage>();
-	
-	public static EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
-	public static EquipmentServiceImpl equipmentService = new EquipmentServiceImpl();
-	public static OrderServiceImpl orderService = new OrderServiceImpl();
-	public static ShipmentServiceImpl shipmentService = new ShipmentServiceImpl();
-	public static GoodsServiceImpl goodsService = new GoodsServiceImpl();
-	public static StorageServiceImpl storageService = new StorageServiceImpl();
-	
-	private MessageHandler() {
+public class MessageHandler implements Runnable {
 		
+	public static EmployeeService employeeService = new EmployeeService();
+	public static EquipmentService equipmentService = new EquipmentService();
+	public static OrderService orderService = new OrderService();
+	public static ShipmentService shipmentService = new ShipmentService();
+	public static GoodsService goodsService = new GoodsService();
+	public static StorageService storageService = new StorageService();
+	
+	public MessageHandler() {
+		
+	}
+	
+	@Override
+	public void run() {
+		handle();
+	}
+	
+	public static ArrayList<QueueMessage> getMessages(){
+		return (ArrayList<QueueMessage>) MessageBodies.messageBodies;
 	}
 
 	public static byte[] serializeMessage(QueueMessage message) {
@@ -44,12 +50,10 @@ public class MessageHandler {
 	}
 	
 	public static void handle() {
-		Thread handlerThread = new Thread();
-		handlerThread.start();
-		
-		for(QueueMessage mes : messageBodies) {
+
+		for(QueueMessage mes : getMessages()) {
 			System.out.println(mes);
-			if(mes.getClassName().toLowerCase().equals("employee")) {
+			if(mes.getClassName().equals(Employee.class.toString())) {
 				Employee employee = (Employee) mes.getEntity();
 				
 				if(mes.getOperation().equals(CRUDOperation.CREATE)) {
@@ -57,12 +61,12 @@ public class MessageHandler {
 				} else if(mes.getOperation().equals(CRUDOperation.DELETE)) {
 					employeeService.delete(employee.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ)) {
-					employeeService.getAllEmployees();
+					employeeService.getAll();
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
-					employeeService.getEmployeeById(employee.getId());
+					employeeService.getById(employee.getId());
 				}
 				
-			} else if(mes.getClassName().toLowerCase().equals("equipment")) {
+			} else if(mes.getClassName().equals(EquipmentEntity.class.toString())) {
 				EquipmentEntity equipment = (EquipmentEntity) mes.getEntity();
 				
 				if(mes.getOperation().equals(CRUDOperation.CREATE)) {
@@ -70,58 +74,57 @@ public class MessageHandler {
 				} else if(mes.getOperation().equals(CRUDOperation.DELETE)) {
 					equipmentService.delete(equipment.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ)) {
-					equipmentService.getAllEquipment();
+					equipmentService.getAll();
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
-					equipmentService.getEquipmentById(equipment.getId());
+					equipmentService.getById(equipment.getId());
 				}
 				
-			} else if(mes.getClassName().toLowerCase().equals("storage")) {
+			} else if(mes.getClassName().equals(Storage.class.toString())) {
 				Storage storage = (Storage) mes.getEntity();
 				
 				if(mes.getOperation().equals(CRUDOperation.READ)) {
-					storageService.getAllStorages();
+					storageService.getAll();
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_ID)) {
-					storageService.getStorageById(storage.getId());
+					storageService.getById(storage.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
-					storageService.getStorageGoods(storage.getId());
+					storageService.getWithGoods(storage.getId());
 				}
-			} else if(mes.getClassName().toLowerCase().equals("goods")) {
+				
+			} else if(mes.getClassName().equals(GoodsEntity.class.toString())) {
 				GoodsEntity goods = (GoodsEntity) mes.getEntity();
 				
 				if(mes.getOperation().equals(CRUDOperation.CREATE)) {
 					goodsService.add(goods);
 				} else if(mes.getOperation().equals(CRUDOperation.READ)) {
-					goodsService.getAllGoods();
+					goodsService.getAll();
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_ID)) {
-					goodsService.getGoodsById(goods.getId());
+					goodsService.getById(goods.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.DELETE)) {
 					goodsService.delete(goods.getId());
 				}
 				
-			} else if(mes.getClassName().toLowerCase().equals("order")) {
+			} else if(mes.getClassName().equals(Order.class.toString())) {
 				Order order = (Order) mes.getEntity();
 				
 				if(mes.getOperation().equals(CRUDOperation.READ)) {
-					orderService.getAllOrders();
+					orderService.getAll();
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_ID)) {
-					orderService.getOrderById(order.getId());
+					orderService.getById(order.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
-					orderService.getOrderedGoods(order.getId());
+					orderService.getWithGoods(order.getId());
 				}
-			} else if(mes.getClassName().toLowerCase().equals("shipment")) {
+				
+			} else if(mes.getClassName().equals(Shipment.class.toString())) {
 				Shipment shipment = (Shipment) mes.getEntity();
 				
 				if(mes.getOperation().equals(CRUDOperation.READ)) {
-					shipmentService.getAllShipments();
+					shipmentService.getAll();
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_ID)) {
-					shipmentService.getShipmentById(shipment.getId());
+					shipmentService.getById(shipment.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
-					shipmentService.getShipmentGoods(shipment.getId());
+					shipmentService.getWithGoods(shipment.getId());
 				}
-			} else {
-				handlerThread.stop();
-			}
+			} 
 		}
 	}
-	
 }

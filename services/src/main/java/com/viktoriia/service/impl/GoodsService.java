@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.hibernate.Session;
@@ -8,30 +8,27 @@ import org.hibernate.Transaction;
 
 import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.GoodsTypeEntity;
-import com.viktoriia.entity.Storage;
 import com.viktoriia.entity.enums.GoodsType;
-import com.viktoriia.service.GoodsService;
+import com.viktoriia.service.Service;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class GoodsServiceImpl implements GoodsService {
+public class GoodsService implements Service<GoodsEntity> {
 	
-	public GoodsServiceImpl() {
+	public GoodsService() {
 		
 	}
 	
 	@Override
-	public GoodsEntity getGoodsById(int id) {
+	public GoodsEntity getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAllGoods();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAll();
 		for(GoodsEntity gds : goods) {
 			if(gds.getId() == id) {
 			session.get(GoodsEntity.class, id);
 			return gds;
-			} else {
-				System.out.println("There isn't such Employee");
-			}
+			} 
 		}
 		
 		tx1.commit();
@@ -40,7 +37,7 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public List<GoodsEntity> getAllGoods(){  
+	public List<GoodsEntity> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try
@@ -54,7 +51,6 @@ public class GoodsServiceImpl implements GoodsService {
 	    }
 	}
 
-	@Override
 	public List<GoodsTypeEntity> getAllGoodsTypes() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -99,9 +95,9 @@ public class GoodsServiceImpl implements GoodsService {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		OrderServiceImpl orderService = new OrderServiceImpl();
-		ShipmentServiceImpl shipmentService = new ShipmentServiceImpl();
-		StorageServiceImpl storageService = new StorageServiceImpl();
+		OrderService orderService = new OrderService();
+		ShipmentService shipmentService = new ShipmentService();
+		StorageService storageService = new StorageService();
 		orderService.add(entity.getOrder());
 		shipmentService.add(entity.getShipment());
 		storageService.add(entity.getStorage());
@@ -131,7 +127,7 @@ public class GoodsServiceImpl implements GoodsService {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAllGoods();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAll();
 		for(GoodsEntity gds : goods) {
 			if(gds.getId() == id) {
 			session.delete(gds);

@@ -1,28 +1,19 @@
 package com.viktoriia.service.impl;
 
-import java.time.LocalDate; 
-import java.util.ArrayList;
+ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.viktoriia.entity.GoodsEntity;
-import com.viktoriia.entity.GoodsTypeEntity;
-import com.viktoriia.entity.Order;
-import com.viktoriia.entity.OrderStateEntity;
-import com.viktoriia.entity.Shipment;
-import com.viktoriia.entity.ShipmentStateEntity;
 import com.viktoriia.entity.Storage;
-import com.viktoriia.entity.enums.GoodsType;
-import com.viktoriia.entity.enums.OrderState;
-import com.viktoriia.entity.enums.ShipmentState;
-import com.viktoriia.service.StorageService;
+import com.viktoriia.service.WithGoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class StorageServiceImpl implements StorageService {
+public class StorageService implements WithGoodsService<Storage> {
 	
-	public StorageServiceImpl() {
+	public StorageService() {
 		
 	}
 
@@ -40,7 +31,7 @@ public class StorageServiceImpl implements StorageService {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 				
-		ArrayList<Storage> storages = (ArrayList<Storage>) getAllStorages();
+		ArrayList<Storage> storages = (ArrayList<Storage>) getAll();
 		for(Storage str : storages) {
 			if(str.getId() == id) {
 			session.delete(str);
@@ -51,7 +42,7 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public List<Storage> getAllStorages(){  
+	public List<Storage> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try
@@ -66,11 +57,11 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public Storage getStorageById(int id) {
+	public Storage getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Storage> storages = (ArrayList<Storage>) getAllStorages();
+		ArrayList<Storage> storages = (ArrayList<Storage>) getAll();
 		for(Storage stor : storages) {
 			if(stor.getId() == id) {
 			session.get(Storage.class, id);
@@ -84,12 +75,12 @@ public class StorageServiceImpl implements StorageService {
 
 
 	@Override
-	public List<GoodsEntity> getStorageGoods(int storageId) {
+	public List<GoodsEntity> getWithGoods(int storageId) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		GoodsServiceImpl goodsService = new GoodsServiceImpl();
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAllGoods();
+		GoodsService goodsService = new GoodsService();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAll();
 		ArrayList<GoodsEntity> storageGoods = new ArrayList<GoodsEntity>();
 		for(GoodsEntity gds : goods) {
 			if(gds.getStorage().getId() == storageId) {

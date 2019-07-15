@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.hibernate.Session;
@@ -10,16 +10,15 @@ import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Order;
 import com.viktoriia.entity.OrderStateEntity;
 import com.viktoriia.entity.enums.OrderState;
-import com.viktoriia.service.OrderService;
+import com.viktoriia.service.WithGoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class OrderServiceImpl implements OrderService {
+public class OrderService implements WithGoodsService<Order> {
 	
-	public OrderServiceImpl() {
+	public OrderService() {
 		
 	}
 	
-	@Override
 	public void add(Order order) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -38,11 +37,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public Order getOrderById(int id) {
+	public Order getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Order> orders = (ArrayList<Order>) getAllOrders();
+		ArrayList<Order> orders = (ArrayList<Order>) getAll();
 		for(Order ord : orders) {
 			if(ord.getId() == id) {
 			session.get(Order.class, id);
@@ -56,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public List<Order> getAllOrders(){  
+	public List<Order> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try
@@ -70,13 +69,13 @@ public class OrderServiceImpl implements OrderService {
 	    }
 	}
 	
-	
-	public List<GoodsEntity> getOrderedGoods(int orderId) {
+	@Override
+	public List<GoodsEntity> getWithGoods(int orderId) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		GoodsServiceImpl goodsService = new GoodsServiceImpl();
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAllGoods();
+		GoodsService goodsService = new GoodsService();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAll();
 		ArrayList<GoodsEntity> orderedGoods = new ArrayList<GoodsEntity>();
 		for(GoodsEntity gds : goods) {
 			if(gds.getOrder().getId() == orderId) {
@@ -89,7 +88,6 @@ public class OrderServiceImpl implements OrderService {
 		return null;
 	}
 
-	@Override
 	public List<OrderStateEntity> getAllOrderStates() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();

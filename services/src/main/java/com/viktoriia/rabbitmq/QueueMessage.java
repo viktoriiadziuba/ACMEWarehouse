@@ -13,7 +13,7 @@ public class QueueMessage implements Serializable {
 	private AbstractEntity entity;
 	
 	public String getClassName() {
-		return className;
+		return entity.getClass().toString();
 	}
 	public void setClassName(String className) {
 		this.className = className;
