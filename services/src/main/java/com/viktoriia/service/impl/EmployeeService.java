@@ -1,6 +1,5 @@
 package com.viktoriia.service.impl;
 
-import java.io.Serializable;   
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +15,11 @@ import com.viktoriia.rabbitmq.QueueConsumer;
 import com.viktoriia.rabbitmq.QueueMessage;
 import com.viktoriia.rabbitmq.QueueProducer;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.Service;
 
-public class EmployeeService implements Serializable, Service<Employee> {
-	
-	private static final long serialVersionUID = -4934208404889582098L;
-	
+public class EmployeeService extends AbstractService implements Service<Employee> {
+		
 	public EmployeeService() { 
 		
 	}
@@ -50,7 +48,7 @@ public class EmployeeService implements Serializable, Service<Employee> {
 		shipment.setId(8);
 	
 		QueueMessage message = new QueueMessage();
-		message.setClassName(Shipment.class.toString());
+		message.setClassEntity(Shipment.class);
 		message.setOperation(CRUDOperation.READ_BY_FIELD);
 		message.setEntity(shipment);
 		

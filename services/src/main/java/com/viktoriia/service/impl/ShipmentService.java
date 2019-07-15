@@ -10,10 +10,11 @@ import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Shipment;
 import com.viktoriia.entity.ShipmentStateEntity;
 import com.viktoriia.entity.enums.ShipmentState;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.WithGoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class ShipmentService implements WithGoodsService<Shipment> {
+public class ShipmentService extends AbstractService implements WithGoodsService<Shipment> {
 	
 	public ShipmentService() {
 		

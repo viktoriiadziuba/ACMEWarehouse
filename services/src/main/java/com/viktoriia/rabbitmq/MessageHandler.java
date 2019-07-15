@@ -1,6 +1,6 @@
 package com.viktoriia.rabbitmq;
 
-import java.util.ArrayList;  
+import java.util.ArrayList;   
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -10,6 +10,7 @@ import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Order;
 import com.viktoriia.entity.Shipment;
 import com.viktoriia.entity.Storage;
+import com.viktoriia.service.ServiceFactory;
 import com.viktoriia.service.impl.EmployeeService;
 import com.viktoriia.service.impl.EquipmentService;
 import com.viktoriia.service.impl.GoodsService;
@@ -18,13 +19,6 @@ import com.viktoriia.service.impl.ShipmentService;
 import com.viktoriia.service.impl.StorageService;
 
 public class MessageHandler implements Runnable {
-		
-	public static EmployeeService employeeService = new EmployeeService();
-	public static EquipmentService equipmentService = new EquipmentService();
-	public static OrderService orderService = new OrderService();
-	public static ShipmentService shipmentService = new ShipmentService();
-	public static GoodsService goodsService = new GoodsService();
-	public static StorageService storageService = new StorageService();
 	
 	public MessageHandler() {
 		
@@ -36,7 +30,7 @@ public class MessageHandler implements Runnable {
 	}
 	
 	public static ArrayList<QueueMessage> getMessages(){
-		return (ArrayList<QueueMessage>) MessageBodies.messageBodies;
+		return (ArrayList<QueueMessage>) MessageBodies.getMessageBodies();
 	}
 
 	public static byte[] serializeMessage(QueueMessage message) {
@@ -50,11 +44,13 @@ public class MessageHandler implements Runnable {
 	}
 	
 	public static void handle() {
-
+		
 		for(QueueMessage mes : getMessages()) {
 			System.out.println(mes);
-			if(mes.getClassName().equals(Employee.class.toString())) {
+			
+			if(mes.getClassEntity().equals(Employee.class)) {
 				Employee employee = (Employee) mes.getEntity();
+				EmployeeService employeeService = (EmployeeService) ServiceFactory.getService(employee);
 				
 				if(mes.getOperation().equals(CRUDOperation.CREATE)) {
 					employeeService.add(employee);
@@ -66,8 +62,9 @@ public class MessageHandler implements Runnable {
 					employeeService.getById(employee.getId());
 				}
 				
-			} else if(mes.getClassName().equals(EquipmentEntity.class.toString())) {
+			} else if(mes.getClassEntity().equals(EquipmentEntity.class)) {
 				EquipmentEntity equipment = (EquipmentEntity) mes.getEntity();
+				EquipmentService equipmentService = (EquipmentService) ServiceFactory.getService(equipment);
 				
 				if(mes.getOperation().equals(CRUDOperation.CREATE)) {
 					equipmentService.add(equipment);
@@ -79,8 +76,9 @@ public class MessageHandler implements Runnable {
 					equipmentService.getById(equipment.getId());
 				}
 				
-			} else if(mes.getClassName().equals(Storage.class.toString())) {
+			} else if(mes.getClassEntity().equals(Storage.class)) {
 				Storage storage = (Storage) mes.getEntity();
+				StorageService storageService = (StorageService) ServiceFactory.getService(storage);
 				
 				if(mes.getOperation().equals(CRUDOperation.READ)) {
 					storageService.getAll();
@@ -90,8 +88,9 @@ public class MessageHandler implements Runnable {
 					storageService.getWithGoods(storage.getId());
 				}
 				
-			} else if(mes.getClassName().equals(GoodsEntity.class.toString())) {
+			} else if(mes.getClassEntity().equals(GoodsEntity.class)) {
 				GoodsEntity goods = (GoodsEntity) mes.getEntity();
+				GoodsService goodsService = (GoodsService) ServiceFactory.getService(goods);
 				
 				if(mes.getOperation().equals(CRUDOperation.CREATE)) {
 					goodsService.add(goods);
@@ -103,8 +102,9 @@ public class MessageHandler implements Runnable {
 					goodsService.delete(goods.getId());
 				}
 				
-			} else if(mes.getClassName().equals(Order.class.toString())) {
+			} else if(mes.getClassEntity().equals(Order.class)) {
 				Order order = (Order) mes.getEntity();
+				OrderService orderService = (OrderService) ServiceFactory.getService(order);
 				
 				if(mes.getOperation().equals(CRUDOperation.READ)) {
 					orderService.getAll();
@@ -114,8 +114,9 @@ public class MessageHandler implements Runnable {
 					orderService.getWithGoods(order.getId());
 				}
 				
-			} else if(mes.getClassName().equals(Shipment.class.toString())) {
+			} else if(mes.getClassEntity().equals(Shipment.class)) {
 				Shipment shipment = (Shipment) mes.getEntity();
+				ShipmentService shipmentService = (ShipmentService) ServiceFactory.getService(shipment);
 				
 				if(mes.getOperation().equals(CRUDOperation.READ)) {
 					shipmentService.getAll();

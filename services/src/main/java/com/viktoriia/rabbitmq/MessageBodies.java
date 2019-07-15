@@ -10,5 +10,14 @@ public class MessageBodies {
 	private MessageBodies() {
 
 	}
+
+	public  synchronized static List<QueueMessage> getMessageBodies() {
+		return messageBodies;
+	}
+
+	public  synchronized static void setMessageBodies(List<QueueMessage> messageBodies) {
+		MessageBodies.messageBodies = messageBodies;
+	}
+	
 	
 }

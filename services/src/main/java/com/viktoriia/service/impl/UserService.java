@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.security.NoSuchAlgorithmException; 
+import java.security.NoSuchAlgorithmException;   
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ import org.hibernate.Transaction;
 import com.viktoriia.entity.User;
 import com.viktoriia.entity.UserRoleEntity;
 import com.viktoriia.entity.enums.UserRole;
-import com.viktoriia.service.UserService;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
 @Stateless
-public class UserServiceImpl implements UserService {
+public class UserService extends AbstractService {
 	
 	private EntityManager manager;
 	
-	public UserServiceImpl() {
+	public UserService() {
 		
 	}
 
@@ -73,25 +73,21 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
-	@Override
 	public User getUserById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public boolean existsByPhone(String phoneNumber) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public String signin(String username, String password, String authToken) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public List<UserRoleEntity> getAllUserRoles() {
 		// TODO Auto-generated method stub
 		return null;

@@ -9,10 +9,11 @@ import org.hibernate.Transaction;
 import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.GoodsTypeEntity;
 import com.viktoriia.entity.enums.GoodsType;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.Service;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class GoodsService implements Service<GoodsEntity> {
+public class GoodsService extends AbstractService implements Service<GoodsEntity> {
 	
 	public GoodsService() {
 		

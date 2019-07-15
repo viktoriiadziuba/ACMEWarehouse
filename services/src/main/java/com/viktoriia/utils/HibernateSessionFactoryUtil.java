@@ -26,7 +26,7 @@ import com.viktoriia.service.impl.EquipmentService;
 import com.viktoriia.service.impl.GoodsService;
 import com.viktoriia.service.impl.OrderService;
 import com.viktoriia.service.impl.ShipmentService;
-import com.viktoriia.service.impl.UserServiceImpl;
+import com.viktoriia.service.impl.UserService;
 
 public class HibernateSessionFactoryUtil {
 	

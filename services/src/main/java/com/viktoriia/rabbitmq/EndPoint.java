@@ -16,11 +16,11 @@ public abstract class EndPoint {
 	protected Connection connection;
 	protected String endPointName;
 	InputStream inputStream;
-	String host = "";
 	
-	public String getPropValue() throws IOException {
+	public Properties getPropValue() throws IOException {
+		Properties prop = new Properties();
+		
 		try {
-			Properties prop = new Properties();
 			String propFileName = "rabbitmq.properties";
 			
 			inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
@@ -30,20 +30,19 @@ public abstract class EndPoint {
 			} else {
 				throw new FileNotFoundException("Property file " + propFileName + " not found");
 			}
-			host = prop.getProperty("host");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			inputStream.close();
 		}
-		return host;
+		return prop;
 	}
 	
 	public EndPoint(String endpointName) throws IOException, TimeoutException {
 		this.endPointName = endpointName;
 		
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(host);
+		factory.setHost(getPropValue().getProperty("host"));
 		connection = factory.newConnection();
 		channel = connection.createChannel();
 		channel.queueDeclare(endpointName, false, false, false, null);

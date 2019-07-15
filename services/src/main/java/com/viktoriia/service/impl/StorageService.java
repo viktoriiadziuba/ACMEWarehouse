@@ -8,10 +8,11 @@ import org.hibernate.Transaction;
 
 import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Storage;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.WithGoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class StorageService implements WithGoodsService<Storage> {
+public class StorageService extends AbstractService implements WithGoodsService<Storage> {
 	
 	public StorageService() {
 		

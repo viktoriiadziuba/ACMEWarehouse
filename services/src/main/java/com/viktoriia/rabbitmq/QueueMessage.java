@@ -8,14 +8,14 @@ public class QueueMessage implements Serializable {
 
 	private static final long serialVersionUID = -2890687862821180912L;
 	
-	private String className;
+	private Class<?> className;
 	private CRUDOperation operation;
 	private AbstractEntity entity;
 	
-	public String getClassName() {
-		return entity.getClass().toString();
+	public Class<? extends AbstractEntity> getClassEntity() {
+		return entity.getClass();
 	}
-	public void setClassName(String className) {
+	public void setClassEntity(Class<?> className) {
 		this.className = className;
 	}
 	public CRUDOperation getOperation() {

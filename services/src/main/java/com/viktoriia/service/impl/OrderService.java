@@ -10,10 +10,11 @@ import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Order;
 import com.viktoriia.entity.OrderStateEntity;
 import com.viktoriia.entity.enums.OrderState;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.WithGoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class OrderService implements WithGoodsService<Order> {
+public class OrderService extends AbstractService implements WithGoodsService<Order> {
 	
 	public OrderService() {
 		

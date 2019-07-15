@@ -1,6 +1,5 @@
 package com.viktoriia.service.impl;
 
-import java.io.Serializable;  
 import java.util.ArrayList; 
 import java.util.List;
 
@@ -10,13 +9,12 @@ import org.hibernate.Transaction;
 import com.viktoriia.entity.EquipmentEntity;
 import com.viktoriia.entity.EquipmentTypeEntity;
 import com.viktoriia.entity.enums.EquipmentType;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.Service;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class EquipmentService implements Serializable, Service<EquipmentEntity> {
+public class EquipmentService extends AbstractService implements Service<EquipmentEntity> {
 	
-	private static final long serialVersionUID = -3439969593531677905L;
-
 	public EquipmentService() {
 		
 	}
