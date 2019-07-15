@@ -34,7 +34,7 @@ public class QueueConsumer extends EndPoint implements Runnable, Consumer, AutoC
 	@Override
 	public void handleDelivery(String consumerTag, Envelope env, BasicProperties props, byte[] body) throws IOException {
 		QueueMessage message = MessageHandler.deserializeMessage(body);
-		MessageHandler.getMessages().add(message);
+		MessageBodies.messageBodies.add(message);
 		pool.execute(new MessageHandler());
 	}
 	

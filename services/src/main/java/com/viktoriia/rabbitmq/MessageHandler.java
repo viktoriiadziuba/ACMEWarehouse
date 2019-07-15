@@ -30,7 +30,9 @@ public class MessageHandler implements Runnable {
 	}
 	
 	public static ArrayList<QueueMessage> getMessages(){
-		return (ArrayList<QueueMessage>) MessageBodies.getMessageBodies();
+		ArrayList<QueueMessage> messages = new ArrayList<QueueMessage>();
+		MessageBodies.getMessageBodies().drainTo(messages);
+		return messages;
 	}
 
 	public static byte[] serializeMessage(QueueMessage message) {
@@ -47,7 +49,7 @@ public class MessageHandler implements Runnable {
 		
 		for(QueueMessage mes : getMessages()) {
 			System.out.println(mes);
-			
+	
 			if(mes.getClassEntity().equals(Employee.class)) {
 				Employee employee = (Employee) mes.getEntity();
 				EmployeeService employeeService = (EmployeeService) ServiceFactory.getService(employee);

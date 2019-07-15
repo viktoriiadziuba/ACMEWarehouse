@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.hibernate.Session;
@@ -49,7 +49,7 @@ public class EmployeeService extends AbstractService implements Service<Employee
 	
 		QueueMessage message = new QueueMessage();
 		message.setClassEntity(Shipment.class);
-		message.setOperation(CRUDOperation.READ_BY_FIELD);
+		message.setOperation(CRUDOperation.READ);
 		message.setEntity(shipment);
 		
 		QueueProducer producer = new QueueProducer("queue");

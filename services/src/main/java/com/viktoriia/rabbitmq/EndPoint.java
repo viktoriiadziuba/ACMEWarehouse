@@ -1,6 +1,5 @@
 package com.viktoriia.rabbitmq;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -15,26 +14,14 @@ public abstract class EndPoint {
 	protected Channel channel;
 	protected Connection connection;
 	protected String endPointName;
-	InputStream inputStream;
 	
 	public Properties getPropValue() throws IOException {
 		Properties prop = new Properties();
+		String propFileName = "rabbitmq.properties";
 		
-		try {
-			String propFileName = "rabbitmq.properties";
-			
-			inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-			
-			if(inputStream != null) {
+		try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName)) {		
 				prop.load(inputStream);
-			} else {
-				throw new FileNotFoundException("Property file " + propFileName + " not found");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			inputStream.close();
-		}
+		}		
 		return prop;
 	}
 	
