@@ -20,7 +20,7 @@ public abstract class EndPoint {
 		String propFileName = "rabbitmq.properties";
 		
 		try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName)) {		
-				prop.load(inputStream);
+			prop.load(inputStream);
 		}		
 		return prop;
 	}

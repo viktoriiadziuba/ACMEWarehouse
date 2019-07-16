@@ -1,5 +1,7 @@
 package com.viktoriia.service;
 
+import java.util.Optional;
+
 import com.viktoriia.entity.AbstractEntity;
 import com.viktoriia.entity.Employee;
 import com.viktoriia.entity.EquipmentEntity;
@@ -19,7 +21,7 @@ import com.viktoriia.service.impl.UserService;
 public class ServiceFactory {
 	
 	public static  AbstractService getService(AbstractEntity entity) {
-		AbstractService service = null;
+		AbstractService service;
 		
 		if(entity instanceof Employee) {
 			service = new EmployeeService();
@@ -36,7 +38,7 @@ public class ServiceFactory {
 		} else if (entity instanceof User) {
 			service = new UserService();
 		} else {
-			service = null;
+			throw new NullPointerException("Service not found");
 		}
 		return service;
 	}

@@ -26,9 +26,17 @@ public class MessageHandler implements Runnable {
 	
 	@Override
 	public void run() {
-		handle();
+		while(!getMessages().isEmpty()) {
+			QueueMessage message;
+			try {
+				message = getMessages().take();
+				handle(message);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} 
+		}
 	}
-	
+		
 	public static BlockingQueue<QueueMessage> getMessages(){
 		return MessageBodies.getMessageBodies();
 	}
@@ -43,11 +51,8 @@ public class MessageHandler implements Runnable {
 		return deserializedMessage;
 	}
 	
-	public static void handle() {
-		
-		for(QueueMessage mes : getMessages()) {
-			System.out.println(mes);
-	
+	public static void handle(QueueMessage mes) {
+			
 			if(mes.getClassEntity().equals(Employee.class)) {
 				Employee employee = (Employee) mes.getEntity();
 				EmployeeService employeeService = (EmployeeService) ServiceFactory.getService(employee);
@@ -126,6 +131,6 @@ public class MessageHandler implements Runnable {
 					shipmentService.getWithGoods(shipment.getId());
 				}
 			} 
-		}
 	}
+	
 }
