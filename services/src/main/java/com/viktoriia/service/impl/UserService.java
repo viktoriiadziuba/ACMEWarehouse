@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.security.NoSuchAlgorithmException; 
+import java.security.NoSuchAlgorithmException;   
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,21 +16,18 @@ import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.viktoriia.entity.DepartmentEntity;
-import com.viktoriia.entity.Employee;
-import com.viktoriia.entity.Person;
 import com.viktoriia.entity.User;
 import com.viktoriia.entity.UserRoleEntity;
-import com.viktoriia.entity.enums.Department;
 import com.viktoriia.entity.enums.UserRole;
+import com.viktoriia.service.AbstractService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
 @Stateless
-public class UserServiceImpl {
+public class UserService extends AbstractService {
 	
 	private EntityManager manager;
 	
-	public UserServiceImpl() {
+	public UserService() {
 		
 	}
 
@@ -47,11 +44,6 @@ public class UserServiceImpl {
 		session.close();		
 	}
 
-	public void update(User user) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public List<User> getAllUsers(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -60,6 +52,9 @@ public class UserServiceImpl {
 	        return session.createCriteria(User.class).list();
 	    } catch (Exception e) {
 	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+	    	session.close();
 	    }
 	}
 	
@@ -74,10 +69,30 @@ public class UserServiceImpl {
 	}
 
 	public boolean existsByUserName(String userName) {
+		
+		return false;
+	}
+
+	public User getUserById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean existsByPhone(String phoneNumber) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	public String signin(String username, String password, String authToken) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<UserRoleEntity> getAllUserRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public String signin(String username, String password) {
 		TypedQuery<String> loginQuery = manager.createNamedQuery("User.login", String.class);
 		loginQuery.setParameter("username", username);

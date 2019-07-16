@@ -1,7 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.time.LocalDate; 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.hibernate.Session;
@@ -11,12 +10,13 @@ import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.Shipment;
 import com.viktoriia.entity.ShipmentStateEntity;
 import com.viktoriia.entity.enums.ShipmentState;
-import com.viktoriia.service.ShipmentService;
+import com.viktoriia.service.AbstractService;
+import com.viktoriia.service.WithGoodsService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class ShipmentServiceImpl implements ShipmentService {
+public class ShipmentService extends AbstractService implements WithGoodsService<Shipment> {
 	
-	public ShipmentServiceImpl() {
+	public ShipmentService() {
 		
 	}
 	
@@ -35,8 +35,9 @@ public class ShipmentServiceImpl implements ShipmentService {
 		tx1.commit();
 		session.close();
 	}
-		
-	public List<Shipment> getAllShipments(){  
+	
+	@Override
+	public List<Shipment> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try
@@ -84,11 +85,11 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 
 	@Override
-	public Shipment getShipmentById(int id) {
+	public Shipment getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Shipment> shipments = (ArrayList<Shipment>) getAllShipments();
+		ArrayList<Shipment> shipments = (ArrayList<Shipment>) getAll();
 		for(Shipment ship : shipments) {
 			if(ship.getId() == id) {
 			session.get(Shipment.class, id);
@@ -102,12 +103,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 
 	@Override
-	public List<GoodsEntity> getShipmentGoods(int shipmentId) {
+	public List<GoodsEntity> getWithGoods(int shipmentId) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		GoodsServiceImpl goodsService = new GoodsServiceImpl();
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAllGoods();
+		GoodsService goodsService = new GoodsService();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) goodsService.getAll();
 		ArrayList<GoodsEntity> shipmentGoods = new ArrayList<GoodsEntity>();
 		for(GoodsEntity gds : goods) {
 			if(gds.getShipment().getId() == shipmentId) {

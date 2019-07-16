@@ -1,8 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.io.Serializable; 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.ArrayList;  
 import java.util.List;
 
 import org.hibernate.Session;
@@ -10,17 +8,15 @@ import org.hibernate.Transaction;
 
 import com.viktoriia.entity.DepartmentEntity;
 import com.viktoriia.entity.Employee;
-import com.viktoriia.entity.Person;
 import com.viktoriia.entity.enums.Department;
-import com.viktoriia.service.EmployeeService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
+import com.viktoriia.service.AbstractService;
+import com.viktoriia.service.Service;
 
-public class EmployeeServiceImpl implements Serializable, EmployeeService {
-	
-	private static final long serialVersionUID = -4934208404889582098L;
-	
-	public EmployeeServiceImpl() { 
-
+public class EmployeeService extends AbstractService implements Service<Employee> {
+		
+	public EmployeeService() { 
+		
 	}
 
 	@Override
@@ -34,38 +30,20 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 				employee.setDepartment(dep);
 			} 
 		}
+	
 		session.save(employee.getPerson());
 		session.save(employee);
 		
 		tx1.commit();
 		session.close();
 	}
-	
-//	public static void main(String[] args) throws Exception {
-//		DepartmentEntity dep = new DepartmentEntity();
-//		dep.setDepartment(Department.HR_DEPARTMENT);
-//		
-//		Person p = new Person();
-//		p.setEmail("allina21@email.com");
-//		p.setDateOfBirth(LocalDate.now());
-//		p.setPhoneNumber("+3809795021");
-//		p.setFullName("Allina");
-//		
-//		Employee e = new Employee();
-//		e.setPerson(p);
-//		e.setDepartment(dep);
-//		
-//		EmployeeServiceImpl service = new EmployeeServiceImpl();
-//		//System.out.println(service.getAllDepartments());
-//		//service.add(e);
-//	}
 
 	@Override
 	public void delete(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Employee> employees = (ArrayList<Employee>) getAllEmployees();
+		ArrayList<Employee> employees = (ArrayList<Employee>) getAll();
 		for(Employee empl : employees) {
 			if(empl.getId() == id) {
 			session.delete(empl);
@@ -77,7 +55,7 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 	}
 	
 	@Override
-	public List<Employee> getAllEmployees(){  
+	public List<Employee> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try {
@@ -91,11 +69,11 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 	}
 	
 	@Override
-	public Employee getEmployeeById(int id) {
+	public Employee getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<Employee> employees = (ArrayList<Employee>) getAllEmployees();
+		ArrayList<Employee> employees = (ArrayList<Employee>) getAll();
 		for(Employee empl : employees) {
 			if(empl.getId() == id) {
 			session.get(Employee.class, id);
@@ -108,7 +86,6 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 		return null;
 	}
 
-	@Override
 	public List<DepartmentEntity> getAllDepartments() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -147,5 +124,4 @@ public class EmployeeServiceImpl implements Serializable, EmployeeService {
 		tx1.commit();
 		session.close();
 	}
-
 }

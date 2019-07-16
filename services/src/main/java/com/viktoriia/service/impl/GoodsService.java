@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.hibernate.Session;
@@ -9,28 +9,27 @@ import org.hibernate.Transaction;
 import com.viktoriia.entity.GoodsEntity;
 import com.viktoriia.entity.GoodsTypeEntity;
 import com.viktoriia.entity.enums.GoodsType;
-import com.viktoriia.service.GoodsService;
+import com.viktoriia.service.AbstractService;
+import com.viktoriia.service.Service;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
-public class GoodsServiceImpl implements GoodsService {
+public class GoodsService extends AbstractService implements Service<GoodsEntity> {
 	
-	public GoodsServiceImpl() {
+	public GoodsService() {
 		
 	}
 	
 	@Override
-	public GoodsEntity getGoodsById(int id) {
+	public GoodsEntity getById(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
-		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAllGoods();
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAll();
 		for(GoodsEntity gds : goods) {
 			if(gds.getId() == id) {
 			session.get(GoodsEntity.class, id);
 			return gds;
-			} else {
-				System.out.println("There isn't such Employee");
-			}
+			} 
 		}
 		
 		tx1.commit();
@@ -39,7 +38,7 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public List<GoodsEntity> getAllGoods(){  
+	public List<GoodsEntity> getAll(){  
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 	    try
@@ -53,7 +52,6 @@ public class GoodsServiceImpl implements GoodsService {
 	    }
 	}
 
-	@Override
 	public List<GoodsTypeEntity> getAllGoodsTypes() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
@@ -91,5 +89,53 @@ public class GoodsServiceImpl implements GoodsService {
 		
 		tx1.commit();
 		session.close();
+	}
+
+	@Override
+	public void add(GoodsEntity entity) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		OrderService orderService = new OrderService();
+		ShipmentService shipmentService = new ShipmentService();
+		StorageService storageService = new StorageService();
+		orderService.add(entity.getOrder());
+		shipmentService.add(entity.getShipment());
+		storageService.add(entity.getStorage());
+		
+		List<GoodsTypeEntity> goodsTypes = getAllGoodsTypes();
+		for(GoodsTypeEntity type : goodsTypes) {
+			if(entity.getType().getType().name() == type.getType().name()) {
+				entity.setType(type);
+			}
+		}
+		
+		entity.setDescription(entity.getDescription());
+		entity.setQuantity(entity.getQuantity());
+		entity.setOrder(entity.getOrder());
+		entity.setShipment(entity.getShipment());
+		entity.setStorage(entity.getStorage());
+		
+		session.save(entity);
+		
+		tx1.commit();
+		session.close();
+		
+	}
+
+	@Override
+	public void delete(int id) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<GoodsEntity> goods = (ArrayList<GoodsEntity>) getAll();
+		for(GoodsEntity gds : goods) {
+			if(gds.getId() == id) {
+			session.delete(gds);
+			}
+		}
+		
+		tx1.commit();
+		session.close();	
 	}
 }

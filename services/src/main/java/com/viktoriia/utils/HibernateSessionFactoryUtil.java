@@ -1,6 +1,6 @@
 package com.viktoriia.utils;
 
-import java.util.Properties; 
+import java.util.Properties;     
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -21,18 +21,18 @@ import com.viktoriia.entity.ShipmentStateEntity;
 import com.viktoriia.entity.Storage;
 import com.viktoriia.entity.User;
 import com.viktoriia.entity.UserRoleEntity;
-import com.viktoriia.service.impl.EmployeeServiceImpl;
-import com.viktoriia.service.impl.EquipmentServiceImpl;
-import com.viktoriia.service.impl.GoodsServiceImpl;
-import com.viktoriia.service.impl.OrderServiceImpl;
-import com.viktoriia.service.impl.ShipmentServiceImpl;
-import com.viktoriia.service.impl.UserServiceImpl;
+import com.viktoriia.service.impl.EmployeeService;
+import com.viktoriia.service.impl.EquipmentService;
+import com.viktoriia.service.impl.GoodsService;
+import com.viktoriia.service.impl.OrderService;
+import com.viktoriia.service.impl.ShipmentService;
+import com.viktoriia.service.impl.UserService;
 
 public class HibernateSessionFactoryUtil {
 	
 	private static SessionFactory sessionFactory;
 
-	public HibernateSessionFactoryUtil() {
+	private HibernateSessionFactoryUtil() {
 		
 	}
 	
@@ -70,12 +70,12 @@ public class HibernateSessionFactoryUtil {
 				StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
 				sessionFactory = configuration.buildSessionFactory(builder.build());
 				
-//				EmployeeServiceImpl.insertAllDepartments();
-//				EquipmentServiceImpl.insertAllEquipmentTypes();
-//				OrderServiceImpl.insertAllOrderStates();
-//				ShipmentServiceImpl.insertAllShipmentStates();
+//				EmployeeService.insertAllDepartments();
+//				EquipmentService.insertAllEquipmentTypes();
+//				OrderService.insertAllOrderStates();
+//				ShipmentService.insertAllShipmentStates();
 //				UserServiceImpl.insertAllUserRoles();
-//				GoodsServiceImpl.insertAllGoodsTypes();
+//				GoodsService.insertAllGoodsTypes();
 			} catch(Exception e) {
 				//catch case
 				e.printStackTrace();
