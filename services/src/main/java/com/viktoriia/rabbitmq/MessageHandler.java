@@ -37,7 +37,7 @@ public class MessageHandler implements Runnable {
 		}
 	}
 		
-	public static BlockingQueue<QueueMessage> getMessages(){
+	private static BlockingQueue<QueueMessage> getMessages(){
 		return MessageBodies.getMessageBodies();
 	}
 
@@ -51,7 +51,7 @@ public class MessageHandler implements Runnable {
 		return deserializedMessage;
 	}
 	
-	public static void handle(QueueMessage mes) {
+	private static void handle(QueueMessage mes) {
 			
 			if(mes.getClassEntity().equals(Employee.class)) {
 				Employee employee = (Employee) mes.getEntity();
