@@ -48,8 +48,8 @@ public class EmployeeService extends AbstractService implements Service<Employee
 		shipment.setId(8);
 	
 		QueueMessage message = new QueueMessage();
-		message.setClassEntity(Shipment.class);
-		message.setOperation(CRUDOperation.READ);
+		message.setClassEntity(Employee.class);
+		message.setOperation(CRUDOperation.CREATE);
 		message.setEntity(shipment);
 		
 		QueueProducer producer = new QueueProducer("queue");

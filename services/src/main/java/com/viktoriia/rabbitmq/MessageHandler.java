@@ -1,6 +1,6 @@
 package com.viktoriia.rabbitmq;
 
-import java.util.ArrayList;   
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -29,10 +29,8 @@ public class MessageHandler implements Runnable {
 		handle();
 	}
 	
-	public static ArrayList<QueueMessage> getMessages(){
-		ArrayList<QueueMessage> messages = new ArrayList<QueueMessage>();
-		MessageBodies.getMessageBodies().drainTo(messages);
-		return messages;
+	public static BlockingQueue<QueueMessage> getMessages(){
+		return MessageBodies.getMessageBodies();
 	}
 
 	public static byte[] serializeMessage(QueueMessage message) {
