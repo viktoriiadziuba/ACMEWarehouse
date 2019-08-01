@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
-        <vaadin.version>13.0.8</vaadin.version>
+        <vaadin.version>13.0.11</vaadin.version>
     </properties>
 
     <repositories>
@@ -35,14 +35,6 @@
             <url>https://maven.vaadin.com/vaadin-prereleases</url>
         </repository>
     </repositories>
-
-    <pluginRepositories>
-        <!-- Repository needed for prerelease versions of Vaadin -->
-        <pluginRepository>
-            <id>vaadin-prereleases</id>
-            <url>https://maven.vaadin.com/vaadin-prereleases</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
@@ -84,19 +76,7 @@
 			<version>7.0</version>
 			<scope>provided</scope>
 		</dependency>
-
-       <!-- https://mvnrepository.com/artifact/javax.annotation/jsr250-api -->
-		<dependency>
-    		<groupId>javax.annotation</groupId>
-    		<artifactId>jsr250-api</artifactId>
-    		<version>1.0</version>
-		</dependency>
-       
-        <dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.7.0</version>
-		</dependency>      
+            
         <dependency>
      		<groupId>com.viktoriia</groupId>
  	 		<artifactId>services</artifactId>
@@ -110,13 +90,6 @@
     		<version>3.9.0</version>
 		</dependency>
     		
-    	<dependency>
-  			<groupId>com.rabbitmq</groupId>
-  			<artifactId>amqp-client</artifactId>
-  			<version>3.5.1</version>
-  			<scope>compile</scope>
-		</dependency> 
-		
     </dependencies>
 
     <build>

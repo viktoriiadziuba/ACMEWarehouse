@@ -1,7 +1,9 @@
 package com.viktoriia.view;
 
+import java.io.IOException; 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.Component;  
@@ -32,6 +34,9 @@ import com.viktoriia.entity.User;
 import com.viktoriia.entity.UserRoleEntity;
 import com.viktoriia.entity.enums.Department;
 import com.viktoriia.entity.enums.UserRole;
+import com.viktoriia.rabbitmq.CRUDOperation;
+import com.viktoriia.rabbitmq.QueueMessage;
+import com.viktoriia.rabbitmq.QueueProducer;
 import com.viktoriia.service.impl.UserService;
 
 @SuppressWarnings("serial")
@@ -40,7 +45,7 @@ import com.viktoriia.service.impl.UserService;
 public class SignUp extends VerticalLayout {
 	
 	private UserService service = new UserService();
-
+	
 	public SignUp() {
 		// HEADER
 		Span title = new Span("Welcome On Board");
@@ -140,7 +145,9 @@ public class SignUp extends VerticalLayout {
 		
 		Binder.BindingBuilder<Person, LocalDate> bindingBuilder = personBinder.forField(dateOfBirth)
 				  .withValidator(dateBirth -> !dateBirth.isBefore(dateOfBirth.getValue()),
-				  "Birthdate cannot be empty");
+				  "Birthdate cannot be empty")
+				  .withValidator(dateBirth -> !dateBirth.isAfter(LocalDate.now()),
+						  "Birthdate is incorrect");
 				Binding<Person, LocalDate> dateBinder = bindingBuilder.bind(Person::getDateOfBirth, Person::setDateOfBirth);
 		dateOfBirth.addValueChangeListener(event -> dateBinder.validate());	
 		
@@ -184,9 +191,40 @@ public class SignUp extends VerticalLayout {
 				
 				user.setEmployee(employee);
 				user.setRole(role);
-				service.signup(user);
 				
-				getUI().ifPresent(ui -> ui.navigate(""));
+				String emailForCheck = email.getValue();
+				String phoneForCheck = phoneNumber.getValue();
+				String usernameForCheck = username.getValue();
+				
+				if(service.existsByEmail(emailForCheck) == false) {
+					if(service.existsByPhone(phoneForCheck) == false) {
+						if(service.existsByUserName(usernameForCheck) == false) {
+				
+						QueueMessage message = new QueueMessage();
+						message.setClassEntity(User.class);
+						message.setEntity(user);
+						message.setOperation(CRUDOperation.CREATE);
+				
+						try {
+							QueueProducer producer = new QueueProducer("queue");
+							producer.sendMessage(message);
+						} catch (IOException | TimeoutException e) {
+							e.printStackTrace();
+						}
+				
+						getUI().ifPresent(ui -> ui.navigate(""));
+						
+						} else {
+							infoLabel.setText("Username already exists");
+						}
+					} else {
+						infoLabel.setText("Phone number already exists");
+					}
+				} else {
+					infoLabel.setText("Email already exists");
+				}
+				
+				
 			} else {
 				BinderValidationStatus<Person> validate = personBinder.validate();
 		        String errorText = validate.getFieldValidationStatuses()
