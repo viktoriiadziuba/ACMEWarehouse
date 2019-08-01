@@ -6,12 +6,12 @@ import com.viktoriia.entity.AbstractEntity;
 
 public interface Service<T extends AbstractEntity> {
 	
-	void add(T entity);
+	public T add(T entity);
 	
-	void delete(int id);
+	public void delete(int id);
 	
-	List<T> getAll();
+	public List<T> getAll();
 	
-	T getById(int id);
+	public T getById(int id);
 
 }

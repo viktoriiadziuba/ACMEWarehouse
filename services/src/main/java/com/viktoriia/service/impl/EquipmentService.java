@@ -20,7 +20,7 @@ public class EquipmentService extends AbstractService implements Service<Equipme
 	}
 	
 	@Override
-	public void add(EquipmentEntity equipment) {
+	public EquipmentEntity add(EquipmentEntity equipment) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
@@ -34,6 +34,7 @@ public class EquipmentService extends AbstractService implements Service<Equipme
 		
 		tx1.commit();
 		session.close();
+		return equipment;
 	}
 	
 	@Override

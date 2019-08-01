@@ -14,15 +14,15 @@ import com.viktoriia.service.AbstractService;
 import com.viktoriia.service.Service;
 
 public class EmployeeService extends AbstractService implements Service<Employee> {
-		
+			
 	public EmployeeService() { 
 		
 	}
 
 	@Override
-	public void add(Employee employee) {
+	public Employee add(Employee employee) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-		Transaction tx1 = session.beginTransaction();
+		session.beginTransaction();
 		
 		List<DepartmentEntity> departments = getAllDepartments();
 		for(DepartmentEntity dep : departments) {
@@ -34,10 +34,11 @@ public class EmployeeService extends AbstractService implements Service<Employee
 		session.save(employee.getPerson());
 		session.save(employee);
 		
-		tx1.commit();
+		session.getTransaction().commit();
 		session.close();
+		return employee;
 	}
-
+	
 	@Override
 	public void delete(int id) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -46,7 +47,7 @@ public class EmployeeService extends AbstractService implements Service<Employee
 		ArrayList<Employee> employees = (ArrayList<Employee>) getAll();
 		for(Employee empl : employees) {
 			if(empl.getId() == id) {
-			session.delete(empl);
+				session.delete(empl);
 			} 
 		}
 		
@@ -89,8 +90,7 @@ public class EmployeeService extends AbstractService implements Service<Employee
 	public List<DepartmentEntity> getAllDepartments() {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		try
-	    {
+		try {
 	        return session.createCriteria(DepartmentEntity.class).list();
 	    } catch (Exception e) {
 	        return new ArrayList<>();
@@ -124,4 +124,5 @@ public class EmployeeService extends AbstractService implements Service<Employee
 		tx1.commit();
 		session.close();
 	}
+	
 }

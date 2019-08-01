@@ -19,5 +19,4 @@ public class MessageBodies {
 		MessageBodies.messageBodies = messageBodies;
 	}
 	
-
 }

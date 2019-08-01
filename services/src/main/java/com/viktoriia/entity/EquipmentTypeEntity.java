@@ -1,6 +1,6 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable; 
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -31,7 +31,7 @@ public class EquipmentTypeEntity extends AbstractEntity implements Serializable 
 	public String toString() {
 		return String.format("	[EquipmentType: "
 				+ "id=%d "
-				+ "type=%s ",
+				+ "type=%s ]",
 				getId(), getType());                 
 	}
 	

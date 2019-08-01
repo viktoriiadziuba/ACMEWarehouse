@@ -1,6 +1,6 @@
 package com.viktoriia.rabbitmq;
 
-import java.io.IOException;  
+import java.io.IOException;   
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
@@ -12,7 +12,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 public class QueueConsumer extends EndPoint implements Runnable, Consumer, AutoCloseable {
 
-	static final int MAX_T = 2;
+	static final int MAX_T = 3;
 	ExecutorService pool;
 
 	public QueueConsumer(String endpointName) throws IOException, TimeoutException {
@@ -20,7 +20,6 @@ public class QueueConsumer extends EndPoint implements Runnable, Consumer, AutoC
 		
 		pool = Executors.newFixedThreadPool(MAX_T);
 	}
-	
 	
 	@Override
 	public void run() {

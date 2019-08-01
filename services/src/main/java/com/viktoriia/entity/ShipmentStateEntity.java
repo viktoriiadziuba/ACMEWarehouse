@@ -1,6 +1,6 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

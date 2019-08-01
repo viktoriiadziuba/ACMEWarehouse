@@ -1,0 +1,35 @@
+.workspace {
+	overflow: auto;
+	background-color: lightgrey;
+} 
+.sideMenu {
+	background-color: white;
+	z-index: 1000;
+	position: absolute;
+	transition: 0.2s;
+	left: -1000px;
+	box-shadow: 2px 1px 5px 0px grey;
+}
+.card {
+	background-color: white;
+	flex-shrink: 0;
+	box-shadow: 2px 1px 5px 0px grey;
+}
+.supplier {
+	background-color: white;
+	flex-shrink: 0;
+	box-shadow: 2px 1px 5px 0px grey;
+}
+.product {
+	background-color: white;
+	flex-shrink: 0;
+	box-shadow: 2px 1px 5px 0px grey;
+}
+.tab {
+	flex-direction: column;
+}
+.layout {
+	margin: auto;
+  	width: 100%;
+ 	padding: 25px;
+}

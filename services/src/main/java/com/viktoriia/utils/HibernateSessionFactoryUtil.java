@@ -1,6 +1,6 @@
-package com.viktoriia.utils;
+ package com.viktoriia.utils;
 
-import java.util.Properties;     
+import java.util.Properties;   
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -49,7 +49,7 @@ public class HibernateSessionFactoryUtil {
 				settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQL9Dialect");
 				settings.put(Environment.POOL_SIZE, "100");
 				settings.put(Environment.SHOW_SQL, "true");
-				//settings.put(Environment.HBM2DDL_AUTO, "create");
+				settings.put(Environment.HBM2DDL_AUTO, "create");
 				
 				configuration.setProperties(settings);
 				configuration.addAnnotatedClass(Employee.class);
@@ -70,18 +70,16 @@ public class HibernateSessionFactoryUtil {
 				StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
 				sessionFactory = configuration.buildSessionFactory(builder.build());
 				
-//				EmployeeService.insertAllDepartments();
-//				EquipmentService.insertAllEquipmentTypes();
-//				OrderService.insertAllOrderStates();
-//				ShipmentService.insertAllShipmentStates();
-//				UserServiceImpl.insertAllUserRoles();
-//				GoodsService.insertAllGoodsTypes();
+				EmployeeService.insertAllDepartments();
+				EquipmentService.insertAllEquipmentTypes();
+				OrderService.insertAllOrderStates();
+				ShipmentService.insertAllShipmentStates();
+				UserService.insertAllUserRoles();
+				GoodsService.insertAllGoodsTypes();
 			} catch(Exception e) {
-				//catch case
 				e.printStackTrace();
 			}
 		}
 		return sessionFactory;
 	}
-
 }
