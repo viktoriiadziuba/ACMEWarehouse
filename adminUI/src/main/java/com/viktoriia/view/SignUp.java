@@ -1,29 +1,50 @@
 package com.viktoriia.view;
 
-import com.vaadin.flow.component.Component;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.vaadin.flow.component.Component;  
+import com.vaadin.flow.component.board.Board;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.NativeButton;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
+import com.vaadin.flow.data.binder.Binder.Binding;
+import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.data.validator.StringLengthValidator;
+import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
+import com.viktoriia.entity.DepartmentEntity;
+import com.viktoriia.entity.Employee;
+import com.viktoriia.entity.Person;
+import com.viktoriia.entity.User;
+import com.viktoriia.entity.UserRoleEntity;
+import com.viktoriia.entity.enums.Department;
+import com.viktoriia.entity.enums.UserRole;
+import com.viktoriia.service.impl.UserService;
 
 @SuppressWarnings("serial")
 @Route("signup")
 @StyleSheet("styles/styles.css")
 public class SignUp extends VerticalLayout {
+	
+	private UserService service = new UserService();
 
 	public SignUp() {
 		// HEADER
-		Span title = new Span("Warehouse");
-		Tab home = new Tab(VaadinIcon.HOME.create(), new RouterLink("Home", Homepage.class));
-		HorizontalLayout header = new HorizontalLayout(title, home);
+		Span title = new Span("Welcome On Board");
+		HorizontalLayout header = new HorizontalLayout(title);
 		header.expand(title);
 		header.setPadding(true);
 		header.setWidth("100%");
@@ -43,34 +64,152 @@ public class SignUp extends VerticalLayout {
 	}
 
 	private Component signUp() {
-		FormLayout layout = new FormLayout();
-
-		// Create the fields
-		TextField firstName = new TextField();
-		firstName.setValueChangeMode(ValueChangeMode.EAGER);
-		TextField lastName = new TextField();
-		lastName.setValueChangeMode(ValueChangeMode.EAGER);
-		TextField phone = new TextField();
-		phone.setValueChangeMode(ValueChangeMode.EAGER);
+		Board board = new Board();
+		
+		FormLayout userLayout = new FormLayout();
+		
+		Binder<User> userBinder = new Binder<>();
+		Binder<UserRoleEntity> roleBinder = new Binder<>();
+		Binder<Person> personBinder = new Binder<>();
+		Binder<DepartmentEntity> depBinder = new Binder<>();
+		
+		User user = new User();
+		UserRoleEntity role = new UserRoleEntity();
+		Person person = new Person();
+		DepartmentEntity department = new DepartmentEntity();
+				
+		TextField username = new TextField();
+		PasswordField password = new PasswordField();
+		ComboBox<UserRole> roleBox = new ComboBox<UserRole>("");
+		roleBox.setItems(UserRole.values());
+				
+		TextField fullName = new TextField();
+		TextField phoneNumber = new TextField();
 		TextField email = new TextField();
-		email.setValueChangeMode(ValueChangeMode.EAGER);
-		DatePicker birthDate = new DatePicker();
+		DatePicker dateOfBirth = new DatePicker();
+		
+		ComboBox<Department> departmentBox = new ComboBox<Department>("");
+		departmentBox.setItems(Department.values());
+		
+		SerializablePredicate<String> phoneOrEmailPredicate = value -> !phoneNumber
+		        .getValue().trim().isEmpty()
+		        && !email.getValue().trim().isEmpty();
+		
+		SerializablePredicate<String> passwordOrUsernamePredicate = value -> !password
+		        .getValue().trim().isEmpty()
+		        && !username.getValue().trim().isEmpty();
 
-		Tab save = new Tab(new RouterLink("Save", SignIn.class));
+		// E-mail and phone have specific validators
+		Binding<Person, String> emailBinding = personBinder.forField(email)
+		        .withValidator(phoneOrEmailPredicate,
+		                "Both phone and email can not be empty")
+		        .withValidator(new EmailValidator("Incorrect email address"))
+		        .bind(Person::getEmail, Person::setEmail);
 
-		layout.addFormItem(firstName, "First name");
-		layout.addFormItem(lastName, "Last name");
-		layout.addFormItem(birthDate, "Birthdate");
-		layout.addFormItem(email, "E-mail");
-		layout.addFormItem(phone, "Phone");
-
+		Binding<Person, String> phoneBinding = personBinder.forField(phoneNumber)
+		        .withValidator(phoneOrEmailPredicate,
+		                "Both phone and email can not be empty")
+		        .bind(Person::getPhoneNumber, Person::setPhoneNumber);
+		
+		Binding<User, String> passwordBinding = userBinder.forField(password)
+				.withValidator(passwordOrUsernamePredicate, "Both password and username can not be empty")
+				.bind(User::getPassword, User::setPassword);
+		
+		Binding<User, String> usernameBinding = userBinder.forField(username)
+				.withValidator(passwordOrUsernamePredicate, "Both password and username can not be empty")
+				.bind(User::getUserName, User::setUserName);
+		
+		// Trigger cross-field validation when the other field is changed
+		email.addValueChangeListener(event -> phoneBinding.validate());
+		phoneNumber.addValueChangeListener(event -> emailBinding.validate());
+		password.addValueChangeListener(event -> passwordBinding.validate());
+		username.addValueChangeListener(event -> usernameBinding.validate());
+		
+		// Full Name name is required field
+		fullName.setRequiredIndicatorVisible(true);
+		departmentBox.setRequiredIndicatorVisible(true);
+		roleBox.setRequiredIndicatorVisible(true);
+		
+		personBinder.forField(fullName)
+		        .withValidator(new StringLengthValidator(
+		                "Please add the name", 1, null))
+		        .bind(Person::getFullName, Person::setFullName);
+		
+		depBinder.bind(departmentBox, DepartmentEntity::getDepartment, DepartmentEntity::setDepartment);
+		roleBinder.bind(roleBox, UserRoleEntity::getRole, UserRoleEntity::setRole);
+		
+		Binder.BindingBuilder<Person, LocalDate> bindingBuilder = personBinder.forField(dateOfBirth)
+				  .withValidator(dateBirth -> !dateBirth.isBefore(dateOfBirth.getValue()),
+				  "Birthdate cannot be empty");
+				Binding<Person, LocalDate> dateBinder = bindingBuilder.bind(Person::getDateOfBirth, Person::setDateOfBirth);
+		dateOfBirth.addValueChangeListener(event -> dateBinder.validate());	
+		
+				
+		NativeButton save = new NativeButton("Save");
+		save.setWidth("20%");
+		Label infoLabel = new Label();
+		infoLabel.addClassName("layout");
+		
 		// Button bar
 		HorizontalLayout actions = new HorizontalLayout();
 		actions.add(save);
-		save.getStyle().set("marginRight", "10px");
+		
+		userLayout.addFormItem(username, "Username");
+		userLayout.addFormItem(password, "Password");
+		userLayout.addFormItem(roleBox, "User Role");
+		userLayout.addFormItem(fullName, "Full Name");
+		userLayout.addFormItem(phoneNumber, "Phone Number");
+		userLayout.addFormItem(email, "Email");
+		userLayout.addFormItem(dateOfBirth, "Date Of Birth");
+		userLayout.addFormItem(departmentBox, "Department");
+		userLayout.addClassName("layout");
 
-		layout.add(actions);
+		
+		save.addClickListener(event -> {
+			
+			if(personBinder.writeBeanIfValid(person) && depBinder.writeBeanIfValid(department) && userBinder.writeBeanIfValid(user) && roleBinder.writeBeanIfValid(role)) {
+				infoLabel.setText(String.format("Saved bean values:  "
+						+ "Username: " + "%s "
+						+ "FullName:  " + "%s "
+						+ " Email:  " + "%s "
+						+ "Phone Number: " + "%s "
+						+ "Birthdate: "	+ "%s "
+						+ "Department: " + "%s "
+						+ "User Role: " + "%s ",
+						user.getUserName(), person.getFullName(), person.getEmail(), person.getPhoneNumber(), person.getDateOfBirth(), department.getDepartment(), role.getRole()));
+				
+				Employee employee = new Employee();
+				employee.setPerson(person);
+				employee.setDepartment(department);
+				
+				user.setEmployee(employee);
+				user.setRole(role);
+				service.signup(user);
+				
+				getUI().ifPresent(ui -> ui.navigate(""));
+			} else {
+				BinderValidationStatus<Person> validate = personBinder.validate();
+		        String errorText = validate.getFieldValidationStatuses()
+		                .stream().filter(BindingValidationStatus::isError)
+		                .map(BindingValidationStatus::getMessage)
+		                .map(Optional::get).distinct()
+		                .collect(Collectors.joining(", "));
+		        BinderValidationStatus<User> validateU = userBinder.validate();
+		        String errorTextU = validateU.getFieldValidationStatuses()
+		                .stream().filter(BindingValidationStatus::isError)
+		                .map(BindingValidationStatus::getMessage)
+		                .map(Optional::get).distinct()
+		                .collect(Collectors.joining(", "));
+		        infoLabel.setText("There are errors: " + errorText + " " + errorTextU);
+			}
+		   
+		});
+		
+		
+		board.addRow(userLayout);
+		board.add(actions);
+		board.addRow(infoLabel);
 
-		return layout;
+		return board;
 	}
 }

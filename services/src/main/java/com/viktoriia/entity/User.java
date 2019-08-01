@@ -22,7 +22,7 @@ public class User extends AbstractEntity implements Serializable {
 	@Column(name="user_name", nullable = false, unique = true)
 	private String userName;
 	
-	@Column(name="password", nullable = false, unique = true)
+	@Column(name="password", nullable = false)
 	private String password;
 	
 	@ManyToOne

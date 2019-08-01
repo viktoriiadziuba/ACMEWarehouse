@@ -1,6 +1,6 @@
 package com.viktoriia.service.impl;
 
-import java.security.NoSuchAlgorithmException;   
+import java.security.NoSuchAlgorithmException;    
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,34 +10,42 @@ import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.viktoriia.entity.DepartmentEntity;
+import com.viktoriia.entity.Employee;
+import com.viktoriia.entity.Person;
 import com.viktoriia.entity.User;
 import com.viktoriia.entity.UserRoleEntity;
+import com.viktoriia.entity.enums.Department;
 import com.viktoriia.entity.enums.UserRole;
 import com.viktoriia.service.AbstractService;
 import com.viktoriia.utils.HibernateSessionFactoryUtil;
 
 @Stateless
 public class UserService extends AbstractService {
-	
-	private EntityManager manager;
-	
+		
 	public UserService() {
 		
 	}
 
-	public void add(User user) {
+	public void signup(User user) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
-		session.save(user.getEmployee());
-		session.save(user.getEmployee().getPerson());
-		session.save(user.getEmployee().getDepartment());
-		session.save(user.getRole());
+		
+		List<UserRoleEntity> userRoles = getAllUserRoles();
+		for(UserRoleEntity role : userRoles) {
+			if(role.getRole().name() == user.getRole().getRole().name()) {
+				user.setRole(role);
+			}
+		}
+		
+		user.setPassword(hashPassword(user.getPassword().toCharArray()));
+		
+		EmployeeService employeeService = new EmployeeService();
+		employeeService.add(user.getEmployee());
 		session.save(user);
 				
 		tx1.commit();
@@ -57,53 +65,135 @@ public class UserService extends AbstractService {
 	    	session.close();
 	    }
 	}
-	
-	public User findByUserName(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public boolean existsByEmail(String email) {
-		// TODO Auto-generated method stub
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<User> users = (ArrayList<User>) getAllUsers();
+		for(User user : users) {
+			if(user.getPerson().getEmail().equals(email)) {
+				if(session.get(User.class, user.getId()) != null) {
+					return true;
+
+				}
+			}
+		}
+		tx1.commit();
+		session.close();
 		return false;
 	}
 
-	public boolean existsByUserName(String userName) {
+	public boolean existsByUserName(String username) {
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
 		
+		ArrayList<User> users = (ArrayList<User>) getAllUsers();
+		for(User user : users) {
+			if(user.getUserName().equals(username)) {
+				if(session.get(User.class, user.getId()) != null)
+				return true;
+			}
+		}
+		tx1.commit();
+		session.close();
 		return false;
 	}
 
 	public User getUserById(int id) {
-		// TODO Auto-generated method stub
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<User> users = (ArrayList<User>) getAllUsers();
+		for(User user : users) {
+			if(user.getId() == id) {
+				session.get(User.class, id);
+				return user;
+			}
+		}
+		tx1.commit();
+		session.close();
 		return null;
 	}
 
 	public boolean existsByPhone(String phoneNumber) {
-		// TODO Auto-generated method stub
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		ArrayList<User> users = (ArrayList<User>) getAllUsers();
+		for(User user : users) {
+			if(user.getPerson().getPhoneNumber().equals(phoneNumber)) {
+				if(session.get(User.class, user.getId()) != null)
+				return true;
+			}
+		}
+		tx1.commit();
+		session.close();
 		return false;
 	}
 
-	public String signin(String username, String password, String authToken) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public List<UserRoleEntity> getAllUserRoles() {
-		// TODO Auto-generated method stub
+		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+		Transaction tx1 = session.beginTransaction();
+		
+		try {
+	        return session.createCriteria(UserRoleEntity.class).list();
+	    } catch (Exception e) {
+	        return new ArrayList<>();
+	    } finally {
+	    	tx1.commit();
+	    	session.close();
+	    }
+	}
+	
+	public User signin(String username, String password) {
+		ArrayList<User> users = (ArrayList<User>) getAllUsers();
+		for(User user : users) {
+			if(user.getUserName().equals(username) && user.getPassword().equals(hashPassword(password.toCharArray()))) {
+				return user;
+			}
+		}
 		return null;
 	}
 	
-	public String signin(String username, String password) {
-		TypedQuery<String> loginQuery = manager.createNamedQuery("User.login", String.class);
-		loginQuery.setParameter("username", username);
-		loginQuery.setParameter("password", hashPassword(password.toCharArray()));
-		
-		try {
-			String role = loginQuery.getSingleResult();
-			return role;
-		} catch (Exception e) {
-			return null;
+	public UserRole authByRole(UserRole role) {
+		ArrayList<User> users = (ArrayList<User>) getAllUsers();
+		for(User user : users) {
+			if(user.getRole().getRole().equals(role)) {
+				return user.getRole().getRole();
+			}
 		}
+		return null;
+	}
+	
+	public static void main(String[] args) {
+		UserRoleEntity role = new UserRoleEntity();
+		role.setRole(UserRole.CHIEF);
+		
+		DepartmentEntity department = new DepartmentEntity();
+		department.setDepartment(Department.CHIEF_DEPARTMENT);
+		
+		Person person = new Person();
+		person.setDateOfBirth(LocalDate.now());
+		person.setEmail("antonina1@ukr.net");
+		person.setFullName("Antonina");
+		person.setPhoneNumber("0978455666");
+		
+		Employee employee = new Employee();
+		employee.setDepartment(department);
+		employee.setPerson(person);
+		
+		User user = new User();
+		user.setPassword("12345");
+		user.setUserName("antonina");
+		user.setRole(role);
+		user.setPerson(employee.getPerson());
+		user.setEmployee(employee);
+		
+		UserService service = new UserService();
+		//service.signup(user);
+		System.out.println(service.signin("antonina", "12345"));
+		
 	}
 	
 	public static String hashPassword(final char[] password) {

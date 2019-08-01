@@ -92,7 +92,7 @@ public class GoodsService extends AbstractService implements Service<GoodsEntity
 	}
 
 	@Override
-	public void add(GoodsEntity entity) {
+	public GoodsEntity add(GoodsEntity entity) {
 		Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 		Transaction tx1 = session.beginTransaction();
 		
@@ -120,7 +120,7 @@ public class GoodsService extends AbstractService implements Service<GoodsEntity
 		
 		tx1.commit();
 		session.close();
-		
+		return entity;
 	}
 
 	@Override
@@ -136,6 +136,6 @@ public class GoodsService extends AbstractService implements Service<GoodsEntity
 		}
 		
 		tx1.commit();
-		session.close();	
+		session.close();
 	}
 }

@@ -19,11 +19,11 @@ import com.viktoriia.service.impl.ShipmentService;
 import com.viktoriia.service.impl.StorageService;
 
 public class MessageHandler implements Runnable {
-	
+		
 	public MessageHandler() {
 		
 	}
-	
+
 	@Override
 	public void run() {
 		while(!getMessages().isEmpty()) {
@@ -37,7 +37,7 @@ public class MessageHandler implements Runnable {
 		}
 	}
 		
-	private static BlockingQueue<QueueMessage> getMessages(){
+	public static BlockingQueue<QueueMessage> getMessages(){
 		return MessageBodies.getMessageBodies();
 	}
 
@@ -52,7 +52,6 @@ public class MessageHandler implements Runnable {
 	}
 	
 	private static void handle(QueueMessage mes) {
-			
 			if(mes.getClassEntity().equals(Employee.class)) {
 				Employee employee = (Employee) mes.getEntity();
 				EmployeeService employeeService = (EmployeeService) ServiceFactory.getService(employee);
@@ -63,7 +62,7 @@ public class MessageHandler implements Runnable {
 					employeeService.delete(employee.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ)) {
 					employeeService.getAll();
-				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
+				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_ID)) {
 					employeeService.getById(employee.getId());
 				}
 				
@@ -77,7 +76,7 @@ public class MessageHandler implements Runnable {
 					equipmentService.delete(equipment.getId());
 				} else if(mes.getOperation().equals(CRUDOperation.READ)) {
 					equipmentService.getAll();
-				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_FIELD)) {
+				} else if(mes.getOperation().equals(CRUDOperation.READ_BY_ID)) {
 					equipmentService.getById(equipment.getId());
 				}
 				

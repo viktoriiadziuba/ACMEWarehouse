@@ -1,7 +1,5 @@
 package com.viktoriia.service;
 
-import java.util.Optional;
-
 import com.viktoriia.entity.AbstractEntity;
 import com.viktoriia.entity.Employee;
 import com.viktoriia.entity.EquipmentEntity;

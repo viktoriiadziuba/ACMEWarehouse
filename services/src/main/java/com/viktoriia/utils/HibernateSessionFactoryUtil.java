@@ -1,6 +1,6 @@
-package com.viktoriia.utils;
+ package com.viktoriia.utils;
 
-import java.util.Properties;     
+import java.util.Properties; 
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -77,11 +77,9 @@ public class HibernateSessionFactoryUtil {
 //				UserServiceImpl.insertAllUserRoles();
 //				GoodsService.insertAllGoodsTypes();
 			} catch(Exception e) {
-				//catch case
 				e.printStackTrace();
 			}
 		}
 		return sessionFactory;
 	}
-
 }

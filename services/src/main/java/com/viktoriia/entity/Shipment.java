@@ -1,17 +1,16 @@
 package com.viktoriia.entity;
 
-import java.io.Serializable; 
+import java.io.Serializable;  
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement 
 @Entity
 @Table(name = "shipments")
 public class Shipment extends AbstractEntity implements Serializable {

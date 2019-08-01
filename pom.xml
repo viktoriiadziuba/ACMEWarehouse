@@ -16,7 +16,6 @@
 	<modules>
     <module>adminUI</module>
     <module>services</module>
-    <module>userUI</module>
   </modules>
   	
   <dependencies>
